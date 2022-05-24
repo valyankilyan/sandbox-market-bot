@@ -1,0 +1,47 @@
+syntax = "proto3";
+package playground;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package="gitlab.ozon.dev/valylankilyan/homework-2-market-bot/api@playground";
+
+enum Resource{
+    Tinkoff = 0;
+}
+
+message Person {
+    int32 UserId = 1;
+    optional string Nickname = 2;
+    optional string Name = 3;
+    optional Resource Resource = 4;
+    string message = 5;
+}
+
+enum SomeType {
+    FATHER = 0;
+    MOTHER = 1;
+    KIDS = 2;
+    GRANDRELATIVES = 3;
+    DOGS = 4;
+    CATS = 5;
+    ADDITIONALINFO = 6;
+}
+
+message SomeRequest {
+    int32 Id = 1;
+    string Text = 2;
+    optional SomeType Relative = 3;
+    google.protobuf.Timestamp Ts = 4;
+}
+
+
+message SomeResponse {
+    int64 Id = 1;
+    int64 Unix = 2;
+    repeated string Text = 3;
+}
+
+service RelativeInformation{
+    rpc GetRelativesData (SomeRequest) returns (SomeResponse) {}
+}
+  
