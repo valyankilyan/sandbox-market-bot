@@ -42,17 +42,3 @@ func (b *Bot) SendMessage(chatID int64, message string) error {
 	_, err = hc.Post(req, "application/json", bytes.NewBuffer([]byte(payload)))
 	return err
 }
-
-func (b *Bot) GetUpdates() (*http.Response, error) {
-	hc := http.Client{Timeout: 10 * time.Second}
-	req, err := b.requestURL("GetUpdates")
-	if err != nil {
-		return nil, err
-	}
-	get, err := hc.Get(req)
-	buff := make([]byte, 10000)
-	body, _ := get.Body.Read(buff)
-	fmt.Println("BODY:", body)
-	fmt.Println("Buffer:", string(buff))
-	return get, err
-}
