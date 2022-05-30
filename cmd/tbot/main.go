@@ -28,5 +28,6 @@ func main() {
 	}
 	fmt.Println("USER:", user)
 	bot.SendMessage(user.TgId, "Hello from Go")
-	bot.GetUpdates()
+	body, _ := bot.GetUpdates()
+	bot.GetMessages(body)
 }
