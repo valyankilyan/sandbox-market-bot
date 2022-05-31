@@ -20,16 +20,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(config.Conf)
 
 	bot := telegram.New(string(config.Conf.Telegram.Token))
-	var user config.User
-	for _, u := range config.Conf.Users {
-		user = u
-	}
-	fmt.Println("USER:", user)
-	bot.SendMessage(user.TgId, "Hello from Go")
 	go bot.GetUpdates()
+
 	if err != nil {
 		fmt.Println(err.Error())
 		return

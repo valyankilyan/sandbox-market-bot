@@ -45,9 +45,18 @@ func ParseConfig(file []byte) error {
 	if err != nil {
 		return fmt.Errorf("config.go %v", err)
 	}
-	fmt.Println("cy.Telegram =", cy.Telegram)
 	Conf.Telegram = Telegram(cy.Telegram)
-	fmt.Println("conf.tg =", Conf.Telegram)
+	fmt.Printf(`Telegram Config:
+	offset = %v
+	limit = %v
+	timeout = %v
+	allowed_updates = %v
+`,
+		Conf.Telegram.GetUpdates.Offset,
+		Conf.Telegram.GetUpdates.Limit,
+		Conf.Telegram.GetUpdates.Timeout,
+		Conf.Telegram.GetUpdates.AllowedUpdates,
+	)
 	Conf.Users = make(map[int64]User)
 
 	for _, user := range cy.Users {

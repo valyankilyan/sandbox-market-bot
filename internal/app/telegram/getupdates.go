@@ -71,7 +71,7 @@ func (b *Bot) GetUpdates() (err error) {
 			return fmt.Errorf("error in getUpdates %v", err)
 		}
 
-		fmt.Println(url)
+		// fmt.Println(url)
 		response, err := hc.Get(url)
 		if err != nil {
 			return fmt.Errorf("getupdates %v", err)
@@ -80,13 +80,9 @@ func (b *Bot) GetUpdates() (err error) {
 		var updates JsonUpdates
 		json.NewDecoder(response.Body).Decode(&updates)
 		go b.getMessages(updates)
-		// fmt.Println(updates)
-		fmt.Println("len =", len(updates.Result))
-		fmt.Println(updates.Result)
 
 		if l := len(updates.Result); l != 0 {
 			config.Conf.Telegram.GetUpdates.Offset = updates.Result[l-1].UpdateID + 1
-			fmt.Println("New Offset", updates.Result[l-1].UpdateID)
 		}
 
 		response.Body.Close()
@@ -139,9 +135,8 @@ func (b *Bot) getMessages(updates JsonUpdates) error {
 	}
 
 	for _, m := range messages {
-		fmt.Println("message", m.MessageID)
+		fmt.Printf("New message from %s: %s\n", m.From.Username, m.Text)
 		b.SendMessage(m.Chat.ID, m.Text)
-		fmt.Println(m)
 	}
 
 	return nil
