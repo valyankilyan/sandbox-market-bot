@@ -15,19 +15,20 @@ func main() {
 		log.Fatal(err)
 	}
 
-	c, err := config.ParseConfig(b)
+	err = config.ParseConfig(b)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(c)
+	fmt.Println(config.Conf)
 
-	bot := telegram.New(string(c.TgToken))
+	bot := telegram.New(string(config.Conf.Telegram.Token))
 	var user config.User
-	for _, u := range c.Users {
+	for _, u := range config.Conf.Users {
 		user = u
 	}
 	fmt.Println("USER:", user)
 	bot.SendMessage(user.TgId, "Hello from Go")
-	body, _ := bot.GetUpdates()
-	bot.GetMessages(body)
+	go bot.GetUpdates()
+	// body, _ := bot.GetUpdates()
+	// bot.GetMessages(body)
 }

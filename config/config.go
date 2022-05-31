@@ -1,6 +1,8 @@
 package config
 
 import (
+	"fmt"
+
 	"gopkg.in/yaml.v2"
 )
 
@@ -17,9 +19,17 @@ import (
 // 	} `yaml:"users"`
 // }
 
-type configYaml struct {
-	TgToken TgToken `yaml:"tgtoken"`
-	Users   []struct {
+type ConfigYaml struct {
+	Telegram struct {
+		Token      string `yaml:"token"`
+		GetUpdates struct {
+			Offset         int64    `yaml:"offset"`
+			Limit          int64    `yaml:"limit"`
+			Timeout        int      `yaml:"timeout"`
+			AllowedUpdates []string `yaml:"allowed_updates"`
+		} `yaml:"getUpdates"`
+	} `yaml:"telegram"`
+	Users []struct {
 		Name         string `yaml:"name"`
 		TgUserName   string `yaml:"TgUserName"`
 		TgId         int64  `yaml:"TgId"`
@@ -27,19 +37,20 @@ type configYaml struct {
 	} `yaml:"users"`
 }
 
-func ParseConfig(file []byte) (*Config, error) {
-	cy := configYaml{}
+var Conf Config
+
+func ParseConfig(file []byte) error {
+	var cy ConfigYaml
 	err := yaml.Unmarshal(file, &cy)
 	if err != nil {
-		return nil, err
+		return fmt.Errorf("config.go %v", err)
 	}
 
-	c := Config{}
-	c.TgToken = cy.TgToken
-	c.Users = make(map[int64]User)
+	Conf.Telegram = Telegram(cy.Telegram)
+	Conf.Users = make(map[int64]User)
 
 	for _, user := range cy.Users {
-		c.Users[user.TgId] = User{
+		Conf.Users[user.TgId] = User{
 			user.Name,
 			user.TgUserName,
 			user.TgId,
@@ -47,5 +58,5 @@ func ParseConfig(file []byte) (*Config, error) {
 		}
 	}
 
-	return &c, nil
+	return nil
 }

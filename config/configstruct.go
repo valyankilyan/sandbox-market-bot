@@ -1,6 +1,14 @@
 package config
 
-type TgToken string
+type Telegram struct {
+	Token      string
+	GetUpdates struct {
+		Offset         int64
+		Limit          int64
+		Timeout        int
+		AllowedUpdates []string
+	}
+}
 
 type User struct {
 	Name         string
@@ -10,6 +18,6 @@ type User struct {
 }
 
 type Config struct {
-	TgToken TgToken
-	Users   map[int64]User
+	Telegram Telegram
+	Users    map[int64]User
 }

@@ -1,14 +1,17 @@
 package telegram
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"time"
+
+	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/config"
 )
 
-type JsonGetUpdates struct {
+type JsonUpdates struct {
 	Status string `json:"status"`
 	Result []struct {
 		UpdateID int `json:"update_id"`
@@ -33,19 +36,39 @@ type JsonGetUpdates struct {
 	} `json:"result"`
 }
 
+type JsonUpdateRequest struct {
+	Offset         int64    `json:"offset"`
+	Limit          int64    `json:"limit"`
+	Timeout        int      `json:"timeout"`
+	AllowedUpdates []string `json:"allowed_updates"`
+}
+
 func (b *Bot) GetUpdates() (body io.ReadCloser, err error) {
 	hc := http.Client{Timeout: 10 * time.Second}
 	req, err := b.requestURL("GetUpdates")
+	fmt.Println(req)
 	if err != nil {
 		return nil, fmt.Errorf("getupdates %v", err)
 	}
-	response, err := hc.Get(req)
+	updateRequest := JsonUpdateRequest{
+		Offset:         config.Conf.Telegram.GetUpdates.Offset,
+		Limit:          config.Conf.Telegram.GetUpdates.Limit,
+		Timeout:        config.Conf.Telegram.GetUpdates.Timeout,
+		AllowedUpdates: config.Conf.Telegram.GetUpdates.AllowedUpdates,
+	}
+	jsonPost, err := json.Marshal(&updateRequest)
+	if err != nil {
+		return nil, fmt.Errorf("getupdates %v", err)
+	}
+
+	postBody := bytes.NewReader(jsonPost)
+	response, err := hc.Post(req, "application/x-www-form-urlencoded", postBody)
 	if err != nil {
 		return nil, fmt.Errorf("getupdates %v", err)
 	}
 	defer response.Body.Close()
 
-	var target JsonGetUpdates
+	var target JsonUpdates
 	json.NewDecoder(response.Body).Decode(&target)
 
 	got, err := json.MarshalIndent(target, "", "\t")
@@ -58,7 +81,7 @@ func (b *Bot) GetUpdates() (body io.ReadCloser, err error) {
 }
 
 func (b *Bot) GetMessages(updates io.ReadCloser) error {
-	var target JsonGetUpdates
+	var target JsonUpdates
 	json.NewDecoder(updates).Decode(&target)
 
 	messages := make([]Message, 0)
