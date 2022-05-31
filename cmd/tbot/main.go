@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/config"
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/app/telegram"
@@ -29,6 +30,11 @@ func main() {
 	fmt.Println("USER:", user)
 	bot.SendMessage(user.TgId, "Hello from Go")
 	go bot.GetUpdates()
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
 	// body, _ := bot.GetUpdates()
 	// bot.GetMessages(body)
+	time.Sleep(100 * time.Second)
 }

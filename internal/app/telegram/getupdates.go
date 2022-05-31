@@ -1,11 +1,10 @@
 package telegram
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
+	"strings"
 	"time"
 
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/config"
@@ -14,7 +13,7 @@ import (
 type JsonUpdates struct {
 	Status string `json:"status"`
 	Result []struct {
-		UpdateID int `json:"update_id"`
+		UpdateID int64 `json:"update_id"`
 		Message  struct {
 			MessageID int64 `json:"message_id"`
 			From      struct {
@@ -43,49 +42,82 @@ type JsonUpdateRequest struct {
 	AllowedUpdates []string `json:"allowed_updates"`
 }
 
-func (b *Bot) GetUpdates() (body io.ReadCloser, err error) {
+func (b *Bot) GetUpdates() (err error) {
 	hc := http.Client{Timeout: 10 * time.Second}
-	req, err := b.requestURL("GetUpdates")
-	fmt.Println(req)
 	if err != nil {
-		return nil, fmt.Errorf("getupdates %v", err)
-	}
-	updateRequest := JsonUpdateRequest{
-		Offset:         config.Conf.Telegram.GetUpdates.Offset,
-		Limit:          config.Conf.Telegram.GetUpdates.Limit,
-		Timeout:        config.Conf.Telegram.GetUpdates.Timeout,
-		AllowedUpdates: config.Conf.Telegram.GetUpdates.AllowedUpdates,
-	}
-	jsonPost, err := json.Marshal(&updateRequest)
-	if err != nil {
-		return nil, fmt.Errorf("getupdates %v", err)
+		return fmt.Errorf("getupdates %v", err)
 	}
 
-	postBody := bytes.NewReader(jsonPost)
-	response, err := hc.Post(req, "application/x-www-form-urlencoded", postBody)
-	if err != nil {
-		return nil, fmt.Errorf("getupdates %v", err)
+	for {
+		// updateRequest := JsonUpdateRequest{
+		// 	Offset:         config.Conf.Telegram.GetUpdates.Offset,
+		// 	Limit:          config.Conf.Telegram.GetUpdates.Limit,
+		// 	Timeout:        config.Conf.Telegram.GetUpdates.Timeout,
+		// 	AllowedUpdates: config.Conf.Telegram.GetUpdates.AllowedUpdates,
+		// }
+		// jsonPost, err := json.Marshal(&updateRequest)
+		// if err != nil {
+		// 	return fmt.Errorf("getupdates %v", err)
+		// }
+
+		// postBody := bytes.NewReader(jsonPost)
+		// fmt.Println(string(jsonPost))
+		// response, err := hc.Post(req, "application/json", postBody)
+		// if err != nil {
+		// return fmt.Errorf("getupdates %v", err)
+		// }
+		url, err := b.urlUpdate()
+		if err != nil {
+			return fmt.Errorf("error in getUpdates %v", err)
+		}
+
+		fmt.Println(url)
+		response, err := hc.Get(url)
+		if err != nil {
+			return fmt.Errorf("getupdates %v", err)
+		}
+
+		var updates JsonUpdates
+		json.NewDecoder(response.Body).Decode(&updates)
+		go b.getMessages(updates)
+		// fmt.Println(updates)
+		fmt.Println("len =", len(updates.Result))
+		fmt.Println(updates.Result)
+
+		if l := len(updates.Result); l != 0 {
+			config.Conf.Telegram.GetUpdates.Offset = updates.Result[l-1].UpdateID + 1
+			fmt.Println("New Offset", updates.Result[l-1].UpdateID)
+		}
+
+		response.Body.Close()
+		time.Sleep(100 * time.Millisecond)
 	}
-	defer response.Body.Close()
-
-	var target JsonUpdates
-	json.NewDecoder(response.Body).Decode(&target)
-
-	got, err := json.MarshalIndent(target, "", "\t")
-	if err != nil {
-		return nil, fmt.Errorf("getupdates %v", err)
-	}
-
-	fmt.Println(string(got))
-	return response.Body, nil
 }
 
-func (b *Bot) GetMessages(updates io.ReadCloser) error {
-	var target JsonUpdates
-	json.NewDecoder(updates).Decode(&target)
+func (b *Bot) urlUpdate() (url string, err error) {
+	gu := config.Conf.Telegram.GetUpdates
+	urlquery := make([]string, 1)
+	urlquery[0], err = b.requestURL("GetUpdates")
+	if err != nil {
+		return "", err
+	}
+	urlquery = append(urlquery, "?")
+	urlquery = append(urlquery, fmt.Sprintf("offset=%v&", gu.Offset))
+	urlquery = append(urlquery, fmt.Sprintf("limit=%v&", gu.Limit))
+	urlquery = append(urlquery, fmt.Sprintf("timeout=%v&", gu.Timeout))
+	urlquery = append(urlquery, "allowed_updates=[")
+	for au := 0; au < len(gu.AllowedUpdates)-1; au++ {
+		urlquery = append(urlquery, fmt.Sprintf("%q,", gu.AllowedUpdates[au]))
+	}
+	urlquery = append(urlquery, fmt.Sprintf("%q", gu.AllowedUpdates[len(gu.AllowedUpdates)-1]))
+	urlquery = append(urlquery, "]")
+	url = strings.Join(urlquery, "")
+	return url, err
+}
 
+func (b *Bot) getMessages(updates JsonUpdates) error {
 	messages := make([]Message, 0)
-	for _, r := range target.Result {
+	for _, r := range updates.Result {
 		var msg Message
 		msg.MessageID = r.Message.MessageID
 
@@ -108,6 +140,7 @@ func (b *Bot) GetMessages(updates io.ReadCloser) error {
 
 	for _, m := range messages {
 		fmt.Println("message", m.MessageID)
+		b.SendMessage(m.Chat.ID, m.Text)
 		fmt.Println(m)
 	}
 
