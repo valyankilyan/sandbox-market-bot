@@ -10,6 +10,10 @@ type Telegram struct {
 	}
 }
 
+type Tinkoff struct {
+	Address string
+}
+
 type User struct {
 	Name         string
 	TgUserName   string
@@ -19,5 +23,6 @@ type User struct {
 
 type Config struct {
 	Telegram Telegram
-	Users    map[int64]User
+	Tinkoff  Tinkoff
+	Users    []User
 }

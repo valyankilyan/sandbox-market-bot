@@ -29,6 +29,9 @@ type ConfigYaml struct {
 			AllowedUpdates []string `yaml:"allowed_updates"`
 		} `yaml:"getUpdates"`
 	} `yaml:"telegram"`
+	Tinkoff struct {
+		Address string `yaml:"address"`
+	} `yaml:"tinkoff"`
 	Users []struct {
 		Name         string `yaml:"name"`
 		TgUserName   string `yaml:"TgUserName"`
@@ -57,10 +60,23 @@ func ParseConfig(file []byte) error {
 		Conf.Telegram.GetUpdates.Timeout,
 		Conf.Telegram.GetUpdates.AllowedUpdates,
 	)
-	Conf.Users = make(map[int64]User)
+	Conf.Tinkoff.Address = cy.Tinkoff.Address
 
-	for _, user := range cy.Users {
-		Conf.Users[user.TgId] = User{
+	Conf.Users = make([]User, len(cy.Users))
+
+	for i, user := range cy.Users {
+		fmt.Printf(`user %d:
+		Name = %v
+		TgUserName = %v
+		TgId %v
+		TinkoffToken = %v`,
+			i,
+			user.Name,
+			user.TgUserName,
+			user.TgId,
+			user.TinkoffToken)
+
+		Conf.Users[i] = User{
 			user.Name,
 			user.TgUserName,
 			user.TgId,
