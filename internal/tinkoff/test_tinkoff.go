@@ -8,7 +8,7 @@ import (
 
 	// "github.com/ofen/tinkoff-invest-example/tinkoff/investapi"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/app/tinkoff/investapi"
+	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/tinkoff/investapi"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

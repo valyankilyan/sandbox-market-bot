@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/app/tinkoff/investapi"
+	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/tinkoff/investapi"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
