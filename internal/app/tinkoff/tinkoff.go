@@ -31,7 +31,7 @@ func (t *Tinkoff) GetAccounts() error {
 
 	ctx = metadata.NewOutgoingContext(
 		ctx,
-		metadata.New(map[string]string{"Authorization": "Bearer t.pZY1NStMMaWnhyXSXNLPTCEbGKRKC2I5MDAsn8Rm0n5WhFKwFPjT5SBdlHWs4owy43G4T2_I-IUTqwD_Hq_DOA"}),
+		metadata.New(map[string]string{"Authorization": fmt.Sprintf("Bearer %v", t.Token)}),
 	)
 
 	conn, err := grpc.Dial(
@@ -51,15 +51,6 @@ func (t *Tinkoff) GetAccounts() error {
 		os.Exit(2)
 	}
 	fmt.Println(resp)
-
-	// {
-	// 	"accountId": "fooBar",
-	// 	"amount": {
-	// 	  "currency": "{{ faker.finance.currency }}",
-	// 	  "units": "123",
-	// 	  "nano": 123
-	// 	}
-	//   }
 
 	spireq := investapi.SandboxPayInRequest{
 		AccountId: resp.Accounts[0].Id,
