@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-const dsn = "host=localhost port=5432 user=postgres password=postgres dbname=marketbot sslmode=disable"
+const dsn = "host=127.0.0.1 port=5432 user=postgres password=postgres dbname=marketbotdb sslmode=disable"
 
 func New() (*gorm.DB, error) {
 	adp, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -19,4 +19,10 @@ func New() (*gorm.DB, error) {
 	adp.AutoMigrate(&models.User{})
 
 	return adp, nil
+}
+
+func AddUser(adp *gorm.DB, usr *models.User) {
+	log.Printf("adding new user: %v\n", *usr)
+	res := adp.Create(usr)
+	log.Printf("res = %v\n", res)
 }
