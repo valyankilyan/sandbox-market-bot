@@ -1,33 +1,48 @@
 package main
 
 import (
-	"fmt"
+	"context"
 	"log"
+	"net"
+	"net/http"
 	"os"
+	"time"
 
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/db"
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/models"
+	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/dbhand"
+	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/srv"
+	pb "gitlab.ozon.dev/valyankilyan/homework-2-market-bot/pkg/api"
+	"google.golang.org/grpc"
 )
 
 func main() {
-	adp, err := db.New()
+	ctx := context.Background()
+	adp, err := db.New(ctx)
 	if err != nil {
 		log.Println(err)
 		os.Exit(0)
 	}
-
-	// usr := models.User{
-	// 	Name:         "test",
-	// 	TgUserName:   "username",
-	// 	TgId:         12345,
-	// 	TinkoffToken: "jsld;kgj;sldkfgj",
+	newServer := srv.New(dbhand.New(adp))
+	lis, err := net.Listen("tcp", "localhost:8080")
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+	// var opts []grpc.ServerOption
+	// opts = []grpc.ServerOption{
+	// 	grpc.UnaryInterceptor(mw.LogInterceptor),
 	// }
 
-	// db.AddUser(adp, &usr)
+	go func() {
+		log.Println(http.ListenAndServe("localhost:6060", nil))
+	}()
 
-	var usr1 models.User
-	adp.First(&usr1)
-	fmt.Printf("usr founded: %v\n", usr1)
-
-	fmt.Println(adp)
+	grpcServer := grpc.NewServer()
+	pb.RegisterMarketBotServer(grpcServer, newServer)
+	err = grpcServer.Serve(lis)
+	if err != nil {
+		panic(err)
+	}
+	for {
+		time.Sleep(time.Second)
+	}
 }

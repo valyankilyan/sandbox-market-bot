@@ -1,0 +1,25 @@
+syntax = "proto3";
+option go_package = "gitlab.ozon.dev/valyankilyan/homework-2-market-bot/api";
+
+package api;
+
+import "google/protobuf/empty.proto";
+
+
+message Id {
+    int64 Id = 1;
+}
+
+message User {
+    string name = 1;
+    string tgUserName = 2;
+    int64 tgId = 3;
+    string tinkoffTokent = 4;
+}
+
+service MarketBot {
+    rpc CreateUser(User) returns (Id) {}
+    rpc ReadUser(Id) returns (User) {}
+    rpc UpdateUser(User) returns (google.protobuf.Empty) {}
+    rpc DeleteUser(Id) returns (google.protobuf.Empty) {}
+}
