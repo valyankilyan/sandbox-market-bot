@@ -10,6 +10,10 @@ message Id {
     int64 Id = 1;
 }
 
+message TgId {
+    int64 TgId = 1;
+}
+
 message User {
     int64 Id = 1;
     string name = 2;
@@ -20,7 +24,7 @@ message User {
 
 service MarketBot {
     rpc CreateUser(User) returns (Id) {}
-    rpc ReadUser(Id) returns (User) {}
+    rpc ReadUser(TgId) returns (User) {}
     rpc UpdateUser(User) returns (google.protobuf.Empty) {}
-    rpc DeleteUser(Id) returns (google.protobuf.Empty) {}
+    rpc DeleteUser(TgId) returns (google.protobuf.Empty) {}
 }

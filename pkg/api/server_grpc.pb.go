@@ -24,9 +24,9 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MarketBotClient interface {
 	CreateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*Id, error)
-	ReadUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*User, error)
+	ReadUser(ctx context.Context, in *TgId, opts ...grpc.CallOption) (*User, error)
 	UpdateUser(ctx context.Context, in *User, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	DeleteUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	DeleteUser(ctx context.Context, in *TgId, opts ...grpc.CallOption) (*emptypb.Empty, error)
 }
 
 type marketBotClient struct {
@@ -46,7 +46,7 @@ func (c *marketBotClient) CreateUser(ctx context.Context, in *User, opts ...grpc
 	return out, nil
 }
 
-func (c *marketBotClient) ReadUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*User, error) {
+func (c *marketBotClient) ReadUser(ctx context.Context, in *TgId, opts ...grpc.CallOption) (*User, error) {
 	out := new(User)
 	err := c.cc.Invoke(ctx, "/api.MarketBot/ReadUser", in, out, opts...)
 	if err != nil {
@@ -64,7 +64,7 @@ func (c *marketBotClient) UpdateUser(ctx context.Context, in *User, opts ...grpc
 	return out, nil
 }
 
-func (c *marketBotClient) DeleteUser(ctx context.Context, in *Id, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+func (c *marketBotClient) DeleteUser(ctx context.Context, in *TgId, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/api.MarketBot/DeleteUser", in, out, opts...)
 	if err != nil {
@@ -78,9 +78,9 @@ func (c *marketBotClient) DeleteUser(ctx context.Context, in *Id, opts ...grpc.C
 // for forward compatibility
 type MarketBotServer interface {
 	CreateUser(context.Context, *User) (*Id, error)
-	ReadUser(context.Context, *Id) (*User, error)
+	ReadUser(context.Context, *TgId) (*User, error)
 	UpdateUser(context.Context, *User) (*emptypb.Empty, error)
-	DeleteUser(context.Context, *Id) (*emptypb.Empty, error)
+	DeleteUser(context.Context, *TgId) (*emptypb.Empty, error)
 	mustEmbedUnimplementedMarketBotServer()
 }
 
@@ -91,13 +91,13 @@ type UnimplementedMarketBotServer struct {
 func (UnimplementedMarketBotServer) CreateUser(context.Context, *User) (*Id, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
-func (UnimplementedMarketBotServer) ReadUser(context.Context, *Id) (*User, error) {
+func (UnimplementedMarketBotServer) ReadUser(context.Context, *TgId) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ReadUser not implemented")
 }
 func (UnimplementedMarketBotServer) UpdateUser(context.Context, *User) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
 }
-func (UnimplementedMarketBotServer) DeleteUser(context.Context, *Id) (*emptypb.Empty, error) {
+func (UnimplementedMarketBotServer) DeleteUser(context.Context, *TgId) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteUser not implemented")
 }
 func (UnimplementedMarketBotServer) mustEmbedUnimplementedMarketBotServer() {}
@@ -132,7 +132,7 @@ func _MarketBot_CreateUser_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _MarketBot_ReadUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
+	in := new(TgId)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -144,7 +144,7 @@ func _MarketBot_ReadUser_Handler(srv interface{}, ctx context.Context, dec func(
 		FullMethod: "/api.MarketBot/ReadUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketBotServer).ReadUser(ctx, req.(*Id))
+		return srv.(MarketBotServer).ReadUser(ctx, req.(*TgId))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -168,7 +168,7 @@ func _MarketBot_UpdateUser_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _MarketBot_DeleteUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Id)
+	in := new(TgId)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -180,7 +180,7 @@ func _MarketBot_DeleteUser_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/api.MarketBot/DeleteUser",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MarketBotServer).DeleteUser(ctx, req.(*Id))
+		return srv.(MarketBotServer).DeleteUser(ctx, req.(*TgId))
 	}
 	return interceptor(ctx, in, info, handler)
 }
