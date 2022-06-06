@@ -49,29 +49,12 @@ func (b *Bot) GetUpdates() (err error) {
 	}
 
 	for {
-		// updateRequest := JsonUpdateRequest{
-		// 	Offset:         config.Conf.Telegram.GetUpdates.Offset,
-		// 	Limit:          config.Conf.Telegram.GetUpdates.Limit,
-		// 	Timeout:        config.Conf.Telegram.GetUpdates.Timeout,
-		// 	AllowedUpdates: config.Conf.Telegram.GetUpdates.AllowedUpdates,
-		// }
-		// jsonPost, err := json.Marshal(&updateRequest)
-		// if err != nil {
-		// 	return fmt.Errorf("getupdates %v", err)
-		// }
-
-		// postBody := bytes.NewReader(jsonPost)
-		// fmt.Println(string(jsonPost))
-		// response, err := hc.Post(req, "application/json", postBody)
-		// if err != nil {
-		// return fmt.Errorf("getupdates %v", err)
-		// }
 		url, err := b.urlUpdate()
 		if err != nil {
 			return fmt.Errorf("error in getUpdates %v", err)
 		}
 
-		// fmt.Println(url)
+		// log.Println(url)
 		response, err := hc.Get(url)
 		if err != nil {
 			return fmt.Errorf("getupdates %v", err)
@@ -136,8 +119,24 @@ func (b *Bot) getMessages(updates JsonUpdates) error {
 
 	for _, m := range messages {
 		fmt.Printf("New message from %s: %s\n", m.From.Username, m.Text)
+		b.HandleMessage(m)
 		b.SendMessage(m.Chat.ID, m.Text)
 	}
 
 	return nil
+}
+
+func (b *Bot) HandleMessage(m Message) {
+	fmt.Println(m)
+	text := strings.Split(m.Text, " ")
+	if len(text) == 0 {
+		b.notRecognized(m.Chat.ID)
+	}
+
+	switch text[0] {
+	case "/help":
+		b.sendHelp(m.Chat.ID)
+	default:
+		b.notRecognized(m.Chat.ID)
+	}
 }

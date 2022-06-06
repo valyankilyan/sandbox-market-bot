@@ -11,6 +11,7 @@ import (
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/telegram"
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/pkg/api"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 )
 
@@ -25,7 +26,8 @@ func main() {
 		log.Fatal(err)
 	}
 
-	conn, err := grpc.Dial(config.Conf.Rpc.Host)
+	conn, err := grpc.Dial(config.Conf.Rpc.Host,
+		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		panic(err)
 	}
