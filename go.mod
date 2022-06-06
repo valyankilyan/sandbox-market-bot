@@ -5,6 +5,7 @@ go 1.18
 require (
 	google.golang.org/grpc v1.47.0
 	google.golang.org/protobuf v1.28.0
+	gopkg.in/yaml.v2 v2.2.3
 	gorm.io/driver/postgres v1.3.7
 	gorm.io/gorm v1.23.5
 )
