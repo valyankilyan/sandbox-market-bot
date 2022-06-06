@@ -14,7 +14,7 @@ type Database struct {
 	Host     string
 	Port     string
 	Username string
-	Passwerd string
+	Password string
 }
 
 type Config struct {

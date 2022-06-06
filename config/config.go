@@ -20,7 +20,7 @@ type ConfigYaml struct {
 		Host     string `yaml:"host"`
 		Port     string `yaml:"port"`
 		Username string `yaml:"username"`
-		Passwerd string `yaml:"passwerd"`
+		Password string `yaml:"passwerd"`
 	} `yaml:"database"`
 }
 
