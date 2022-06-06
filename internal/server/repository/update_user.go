@@ -1,4 +1,4 @@
-package dbhand
+package repository
 
 import (
 	"context"
@@ -6,6 +6,6 @@ import (
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/models"
 )
 
-func (d *dbhandler) UpdateUser(ctx context.Context, usr models.User) error {
+func (d *repository) UpdateUser(ctx context.Context, usr models.User) error {
 	return nil
 }

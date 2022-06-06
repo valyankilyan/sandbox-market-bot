@@ -14,7 +14,7 @@ message User {
     string name = 1;
     string tgUserName = 2;
     int64 tgId = 3;
-    string tinkoffTokent = 4;
+    string tinkoffToken = 4;
 }
 
 service MarketBot {

@@ -1,4 +1,4 @@
-package dbhand
+package repository
 
 import (
 	"context"
@@ -6,6 +6,6 @@ import (
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/models"
 )
 
-func (d *dbhandler) ReadUser(ctx context.Context, Id int) (models.User, error) {
+func (d *repository) ReadUser(ctx context.Context, Id int) (models.User, error) {
 	return models.User{}, nil
 }
