@@ -6,19 +6,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// type configYaml struct {
-// 	Telegram struct {
-// 		Token string `yaml:"token"`
-// 	} `yaml:"telegram"`
-
-// 	Users []struct {
-// 		Name         string `yaml:"name"`
-// 		TgUserName   string `yaml:"TgUserName"`
-// 		TgID         int    `yaml:"TgId"`
-// 		TinkoffToken string `yaml:"TinkoffToken"`
-// 	} `yaml:"users"`
-// }
-
 type ConfigYaml struct {
 	Telegram struct {
 		Token      string `yaml:"token"`
@@ -29,15 +16,18 @@ type ConfigYaml struct {
 			AllowedUpdates []string `yaml:"allowed_updates"`
 		} `yaml:"getUpdates"`
 	} `yaml:"telegram"`
+	Rpc struct {
+		Host string `yaml:"host"`
+	} `yaml:"rpc"`
+	Database struct {
+		Host     string `yaml:"host"`
+		Port     string `yaml:"port"`
+		Username string `yaml:"username"`
+		Password string `yaml:"password"`
+	} `yaml:"database"`
 	Tinkoff struct {
 		Address string `yaml:"address"`
 	} `yaml:"tinkoff"`
-	Users []struct {
-		Name         string `yaml:"name"`
-		TgUserName   string `yaml:"TgUserName"`
-		TgId         int64  `yaml:"TgId"`
-		TinkoffToken string `yaml:"TinkoffToken"`
-	} `yaml:"users"`
 }
 
 var Conf Config
@@ -60,29 +50,10 @@ func ParseConfig(file []byte) error {
 		Conf.Telegram.GetUpdates.Timeout,
 		Conf.Telegram.GetUpdates.AllowedUpdates,
 	)
+
+	Conf.Database = Database(cy.Database)
+	Conf.Rpc = Rpc(cy.Rpc)	
 	Conf.Tinkoff.Address = cy.Tinkoff.Address
-
-	Conf.Users = make([]User, len(cy.Users))
-
-	for i, user := range cy.Users {
-		fmt.Printf(`user %d:
-		Name = %v
-		TgUserName = %v
-		TgId %v
-		TinkoffToken = %v`,
-			i,
-			user.Name,
-			user.TgUserName,
-			user.TgId,
-			user.TinkoffToken)
-
-		Conf.Users[i] = User{
-			user.Name,
-			user.TgUserName,
-			user.TgId,
-			user.TinkoffToken,
-		}
-	}
 
 	return nil
 }

@@ -10,19 +10,24 @@ type Telegram struct {
 	}
 }
 
+type Database struct {
+	Host     string
+	Port     string
+	Username string
+	Password string
+}
+
+type Rpc struct {
+	Host string
+}
+
 type Tinkoff struct {
 	Address string
 }
 
-type User struct {
-	Name         string
-	TgUserName   string
-	TgId         int64
-	TinkoffToken string
-}
-
 type Config struct {
 	Telegram Telegram
+	Database Database
+	Rpc      Rpc
 	Tinkoff  Tinkoff
-	Users    []User
 }

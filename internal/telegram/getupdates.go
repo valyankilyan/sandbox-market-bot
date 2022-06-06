@@ -49,29 +49,12 @@ func (b *Bot) GetUpdates() (err error) {
 	}
 
 	for {
-		// updateRequest := JsonUpdateRequest{
-		// 	Offset:         config.Conf.Telegram.GetUpdates.Offset,
-		// 	Limit:          config.Conf.Telegram.GetUpdates.Limit,
-		// 	Timeout:        config.Conf.Telegram.GetUpdates.Timeout,
-		// 	AllowedUpdates: config.Conf.Telegram.GetUpdates.AllowedUpdates,
-		// }
-		// jsonPost, err := json.Marshal(&updateRequest)
-		// if err != nil {
-		// 	return fmt.Errorf("getupdates %v", err)
-		// }
-
-		// postBody := bytes.NewReader(jsonPost)
-		// fmt.Println(string(jsonPost))
-		// response, err := hc.Post(req, "application/json", postBody)
-		// if err != nil {
-		// return fmt.Errorf("getupdates %v", err)
-		// }
 		url, err := b.urlUpdate()
 		if err != nil {
 			return fmt.Errorf("error in getUpdates %v", err)
 		}
 
-		// fmt.Println(url)
+		// log.Println(url)
 		response, err := hc.Get(url)
 		if err != nil {
 			return fmt.Errorf("getupdates %v", err)
@@ -136,8 +119,37 @@ func (b *Bot) getMessages(updates JsonUpdates) error {
 
 	for _, m := range messages {
 		fmt.Printf("New message from %s: %s\n", m.From.Username, m.Text)
-		b.SendMessage(m.Chat.ID, m.Text)
+		go b.HandleMessage(m)
 	}
 
 	return nil
+}
+
+func (b *Bot) HandleMessage(m Message) {
+	fmt.Println(m)
+	text := strings.Split(m.Text, " ")
+	if len(text) == 0 {
+		b.notRecognized(m.Chat.ID)
+	}
+
+	switch text[0] {
+	case "/start":
+		b.sendStart(m.Chat.ID)
+		b.createUser(m.From)
+	case "/help":
+		b.sendHelp(m.Chat.ID)
+	case "/tinkoff_token":
+		if len(text) == 2 {
+			err := b.updateTinkoffToken(m.From.ID, text[1])
+			if err != nil {
+				b.sendError(m.Chat.ID, "Что-то пошло не так...")
+			} else {
+				b.SendMessage(m.Chat.ID, "Токен обновлен")
+			}
+		} else {
+			b.sendError(m.Chat.ID, "Слишком мало или слишком много аргументов.")
+		}
+	default:
+		b.notRecognized(m.Chat.ID)
+	}
 }
