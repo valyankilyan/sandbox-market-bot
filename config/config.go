@@ -16,6 +16,9 @@ type ConfigYaml struct {
 			AllowedUpdates []string `yaml:"allowed_updates"`
 		} `yaml:"getUpdates"`
 	} `yaml:"telegram"`
+	Rpc struct {
+		Host string `yaml:"host"`
+	} `yaml:"rpc"`
 	Database struct {
 		Host     string `yaml:"host"`
 		Port     string `yaml:"port"`
@@ -46,6 +49,7 @@ func ParseConfig(file []byte) error {
 	)
 
 	Conf.Database = Database(cy.Database)
+	Conf.Rpc = Rpc(cy.Rpc)
 
 	return nil
 }

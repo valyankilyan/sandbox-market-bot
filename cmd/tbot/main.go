@@ -1,13 +1,17 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"os"
 	"time"
 
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/config"
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/app/telegram"
+	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/telegram"
+	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/pkg/api"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 )
 
 func main() {
@@ -21,7 +25,20 @@ func main() {
 		log.Fatal(err)
 	}
 
-	bot := telegram.New(string(config.Conf.Telegram.Token))
+	conn, err := grpc.Dial(config.Conf.Rpc.Host)
+	if err != nil {
+		panic(err)
+	}
+	defer conn.Close()
+
+	client := api.NewMarketBotClient(conn)
+	ctx := context.Background()
+	ctx = metadata.AppendToOutgoingContext(ctx,
+		"sender", "TelegramHandler",
+		"when", time.Now().Format(time.RFC3339),
+	)
+
+	bot := telegram.New(string(config.Conf.Telegram.Token), client, ctx)
 	go bot.GetUpdates()
 
 	if err != nil {

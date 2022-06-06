@@ -17,7 +17,12 @@ type Database struct {
 	Password string
 }
 
+type Rpc struct {
+	Host string
+}
+
 type Config struct {
 	Telegram Telegram
 	Database Database
+	Rpc      Rpc
 }
