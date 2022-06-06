@@ -20,3 +20,7 @@ func (b *Bot) sendHelp(chat_id int64) {
 func (b *Bot) notRecognized(chat_id int64) {
 	b.SendMessage(chat_id, "Извини, я не понял, используй /help")
 }
+
+func (b *Bot) sendError(chat_id int64, err string) {
+	b.SendMessage(chat_id, err)
+}

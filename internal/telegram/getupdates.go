@@ -119,8 +119,7 @@ func (b *Bot) getMessages(updates JsonUpdates) error {
 
 	for _, m := range messages {
 		fmt.Printf("New message from %s: %s\n", m.From.Username, m.Text)
-		b.HandleMessage(m)
-		b.SendMessage(m.Chat.ID, m.Text)
+		go b.HandleMessage(m)
 	}
 
 	return nil
@@ -139,6 +138,17 @@ func (b *Bot) HandleMessage(m Message) {
 		b.createUser(m.From)
 	case "/help":
 		b.sendHelp(m.Chat.ID)
+	case "/tinkoff_token":
+		if len(text) == 2 {
+			err := b.updateTinkoffToken(m.From.ID, text[1])
+			if err != nil {
+				b.sendError(m.Chat.ID, "Что-то пошло не так...")
+			} else {
+				b.SendMessage(m.Chat.ID, "Токен обновлен")
+			}
+		} else {
+			b.sendError(m.Chat.ID, "Слишком мало или слишком много аргументов.")
+		}
 	default:
 		b.notRecognized(m.Chat.ID)
 	}

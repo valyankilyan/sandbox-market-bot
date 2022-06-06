@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 	"time"
@@ -41,13 +40,5 @@ func main() {
 	)
 
 	bot := telegram.New(string(config.Conf.Telegram.Token), client, ctx)
-	go bot.GetUpdates()
-
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-	// body, _ := bot.GetUpdates()
-	// bot.GetMessages(body)
-	time.Sleep(100 * time.Second)
+	bot.GetUpdates()
 }
