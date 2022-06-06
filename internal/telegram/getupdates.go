@@ -134,6 +134,9 @@ func (b *Bot) HandleMessage(m Message) {
 	}
 
 	switch text[0] {
+	case "/start":
+		b.sendStart(m.Chat.ID)
+		b.createUser(m.From)
 	case "/help":
 		b.sendHelp(m.Chat.ID)
 	default:
