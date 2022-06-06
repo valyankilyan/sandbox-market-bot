@@ -11,10 +11,11 @@ message Id {
 }
 
 message User {
-    string name = 1;
-    string tgUserName = 2;
-    int64 tgId = 3;
-    string tinkoffToken = 4;
+    int64 Id = 1;
+    string name = 2;
+    string tgUserName = 3;
+    int64 tgId = 4;
+    string tinkoffToken = 5;
 }
 
 service MarketBot {
