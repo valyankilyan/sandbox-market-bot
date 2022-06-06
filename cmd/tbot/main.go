@@ -12,7 +12,6 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/app/tinkoff"
 )
 
 func main() {
@@ -42,13 +41,4 @@ func main() {
 
 	bot := telegram.New(string(config.Conf.Telegram.Token), client, ctx)
 	bot.GetUpdates()
-	fmt.Println("token in main =", config.Conf.Users[0].TinkoffToken)
-	// body, _ := bot.GetUpdates()
-	// bot.GetMessages(body)
-	// tinkoff.Not_main(config.Conf.Users[0].TinkoffToken)
-	// t := tinkoff.New(config.Conf.Users[0].TinkoffToken)
-	// t.AddAccount()
-	t := tinkoff.New(config.Conf.Users[0].TinkoffToken)
-	t.GetAccounts()
-	time.Sleep(100 * time.Second)
 }

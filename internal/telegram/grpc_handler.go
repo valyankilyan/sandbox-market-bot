@@ -27,3 +27,13 @@ func (b *Bot) updateTinkoffToken(tgid int64, token string) error {
 	_, err = b.client.UpdateUser(b.ctx, usr)
 	return err
 }
+
+func (b *Bot) readUserToken(tgid int64) (token string, err error) {
+	usr, err := b.client.ReadUser(b.ctx, &api.TgId{TgId: tgid})
+	if err != nil {
+		log.Printf("error in updateTinkofToken: %v", err)
+		return "", err
+	}
+
+	return usr.TinkoffToken, nil
+}

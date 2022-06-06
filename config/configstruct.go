@@ -22,7 +22,7 @@ type Rpc struct {
 }
 
 type Tinkoff struct {
-	Address string
+	Endpoint string
 }
 
 type Config struct {

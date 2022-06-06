@@ -7,7 +7,9 @@ const start = `
 const help = `
 /start - старт и регистрация
 /help - помощь
-/tinkoff_token <token> - добавление токена песочницы`
+/tinkoff_token <token> - добавление токена песочницы
+/payin <units (uint)> <nano (uint optional)> - добавление рублей себе на счет.
+Units - это рубли, nano - это копейки`
 
 func (b *Bot) sendStart(chat_id int64) {
 	b.SendMessage(chat_id, start)

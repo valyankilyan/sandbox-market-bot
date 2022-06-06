@@ -139,16 +139,9 @@ func (b *Bot) HandleMessage(m Message) {
 	case "/help":
 		b.sendHelp(m.Chat.ID)
 	case "/tinkoff_token":
-		if len(text) == 2 {
-			err := b.updateTinkoffToken(m.From.ID, text[1])
-			if err != nil {
-				b.sendError(m.Chat.ID, "Что-то пошло не так...")
-			} else {
-				b.SendMessage(m.Chat.ID, "Токен обновлен")
-			}
-		} else {
-			b.sendError(m.Chat.ID, "Слишком мало или слишком много аргументов.")
-		}
+		b.tinkoffToken(m, text)
+	case "/payin":
+		b.payIn(m, text)
 	default:
 		b.notRecognized(m.Chat.ID)
 	}

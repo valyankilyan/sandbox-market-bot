@@ -26,7 +26,7 @@ type ConfigYaml struct {
 		Password string `yaml:"password"`
 	} `yaml:"database"`
 	Tinkoff struct {
-		Address string `yaml:"address"`
+		Endpoint string `yaml:"endpoint"`
 	} `yaml:"tinkoff"`
 }
 
@@ -52,8 +52,8 @@ func ParseConfig(file []byte) error {
 	)
 
 	Conf.Database = Database(cy.Database)
-	Conf.Rpc = Rpc(cy.Rpc)	
-	Conf.Tinkoff.Address = cy.Tinkoff.Address
+	Conf.Rpc = Rpc(cy.Rpc)
+	Conf.Tinkoff.Endpoint = cy.Tinkoff.Endpoint
 
 	return nil
 }
