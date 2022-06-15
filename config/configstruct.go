@@ -19,6 +19,7 @@ type Database struct {
 
 type Rpc struct {
 	Host string
+	Port string
 }
 
 type Tinkoff struct {

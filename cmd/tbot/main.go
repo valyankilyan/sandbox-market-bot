@@ -25,6 +25,11 @@ func main() {
 		log.Fatal(err)
 	}
 
+	if server_host := os.Getenv("SERVER_HOST"); server_host != "" {
+		config.Conf.Rpc.Host = server_host
+	}
+	config.Conf.Rpc.Host = config.Conf.Rpc.Host + config.Conf.Rpc.Port
+
 	conn, err := grpc.Dial(config.Conf.Rpc.Host,
 		grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {

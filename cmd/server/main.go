@@ -24,7 +24,10 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	// ctx := context.Background()
+	if db_host := os.Getenv("DB_HOST"); db_host != "" {
+		config.Conf.Database.Host = db_host
+	}
+
 	adp, err := db.New()
 	if err != nil {
 		log.Println(err)
