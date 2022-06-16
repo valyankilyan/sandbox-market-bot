@@ -27,6 +27,10 @@ func main() {
 	if db_host := os.Getenv("DB_HOST"); db_host != "" {
 		config.Conf.Database.Host = db_host
 	}
+	if server_host := os.Getenv("SERVER_HOST"); server_host != "" {
+		config.Conf.Rpc.Host = server_host
+	}
+	config.Conf.Rpc.Host = config.Conf.Rpc.Host + ":" + config.Conf.Rpc.Port
 
 	adp, err := db.New()
 	if err != nil {
