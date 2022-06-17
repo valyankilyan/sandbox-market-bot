@@ -1,0 +1,3 @@
+[submodule "internal/app/tinkoff/tinkoffAPI"]
+	path = internal/app/tinkoff/tinkoffAPI
+	url = https://github.com/Tinkoff/investAPI.git
