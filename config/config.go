@@ -18,6 +18,7 @@ type ConfigYaml struct {
 	} `yaml:"telegram"`
 	Rpc struct {
 		Host string `yaml:"host"`
+		Port string `yaml:"port"`
 	} `yaml:"rpc"`
 	Database struct {
 		Host     string `yaml:"host"`
