@@ -17,7 +17,6 @@ type CurrencyList struct {
 	List []Currency
 	figi []string
 	lock sync.Mutex
-	tink *Tinkoff
 }
 
 // func New() *
@@ -31,11 +30,10 @@ type Currency struct {
 }
 
 func (c *CurrencyList) InitCurrencies() {
-	c.tink = New(config.Conf.Tinkoff.DefaultToken)
-	ctx, cancel := c.tink.getContext()
+	ctx, cancel := defTink.getContext()
 	defer cancel()
 
-	conn, err := c.tink.getClientConn()
+	conn, err := defTink.getClientConn()
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -76,9 +74,9 @@ func (c *CurrencyList) InitCurrencies() {
 
 func (c *CurrencyList) updateCurrencies() {
 	for {
-		ctx, cancel := c.tink.getContext()
+		ctx, cancel := defTink.getContext()
 
-		conn, err := c.tink.getClientConn()
+		conn, err := defTink.getClientConn()
 		if err != nil {
 			fmt.Println(err.Error())
 			return
@@ -115,9 +113,9 @@ func SCurNano(nano int32) string {
 	return ans
 }
 
-func GetCurrency(sn string) (Currency, bool) {
+func GetCurrency(shortname string) (Currency, bool) {
 	for _, cur := range Currencies.List {
-		if cur.Shortname == sn {
+		if cur.Shortname == shortname {
 			return cur, true
 		}
 	}

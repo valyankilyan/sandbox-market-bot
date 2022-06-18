@@ -46,6 +46,7 @@ func main() {
 	)
 
 	bot := telegram.New(string(config.Conf.Telegram.Token), client, ctx)
+	tinkoff.DefTinkInit()
 	tinkoff.Currencies.InitCurrencies()
 	bot.GetUpdates()
 }
