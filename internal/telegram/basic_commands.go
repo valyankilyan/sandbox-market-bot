@@ -9,7 +9,9 @@ const help = `
 /help - помощь
 /tinkoff_token <token> - добавление токена песочницы
 /payin <units (uint)> <nano (uint optional)> - добавление рублей себе на счет.
-Units - это рубли, nano - это копейки`
+Units - это рубли, nano - это копейки
+/currencies - курс валют
+/currency <shortname1>, ..., <shortname2> - курс выбранных валют`
 
 func (b *Bot) sendStart(chat_id int64) {
 	b.SendMessage(chat_id, start)

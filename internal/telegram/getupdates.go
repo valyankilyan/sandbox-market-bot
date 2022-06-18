@@ -144,6 +144,8 @@ func (b *Bot) HandleMessage(m Message) {
 		b.payIn(m, text)
 	case "/currencies":
 		b.sendCurrencies(m)
+	case "/currency":
+		b.sendCurrency(m, text[1:])
 	default:
 		b.notRecognized(m.Chat.ID)
 	}

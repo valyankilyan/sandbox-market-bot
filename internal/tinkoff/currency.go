@@ -114,3 +114,12 @@ func SCurNano(nano int32) string {
 	ans = strings.TrimRight(ans, "0")
 	return ans
 }
+
+func GetCurrency(sn string) (Currency, bool) {
+	for _, cur := range Currencies.List {
+		if cur.Shortname == sn {
+			return cur, true
+		}
+	}
+	return Currency{}, false
+}
