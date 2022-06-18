@@ -8,7 +8,7 @@ const help = `
 /start - старт и регистрация
 /help - помощь
 /tinkoff_token <token> - добавление токена песочницы
-/payin <units (uint)> <nano (uint optional)> - добавление рублей себе на счет.
+/payin <units (uint)> <nano (uint optional)> - добавление рублей себе на счет (может быть отрицательным числом).
 Units - это рубли, nano - это копейки
 /currencies - курс валют
 /currency <shortname1>, ..., <shortname2> - курс выбранных валют`
