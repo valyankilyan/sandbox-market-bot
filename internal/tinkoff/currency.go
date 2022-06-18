@@ -30,13 +30,6 @@ type Currency struct {
 	Nano      int32
 }
 
-// func init() {
-// 	fmt.Println("CurrenciesInited")
-// 	fmt.Println("tink added")
-// 	Currencies.initCurrencies()
-// 	fmt.Println("Currencies inited")
-// }
-
 func (c *CurrencyList) InitCurrencies() {
 	c.tink = New(config.Conf.Tinkoff.DefaultToken)
 	ctx, cancel := c.tink.getContext()
@@ -50,7 +43,6 @@ func (c *CurrencyList) InitCurrencies() {
 
 	client := investapi.NewInstrumentsServiceClient(conn)
 
-	// is = investapi.InstrumentStatus()
 	ir := investapi.InstrumentsRequest{
 		InstrumentStatus: investapi.InstrumentStatus_INSTRUMENT_STATUS_UNSPECIFIED,
 	}
@@ -103,15 +95,12 @@ func (c *CurrencyList) updateCurrencies() {
 			os.Exit(3)
 		}
 
-		fmt.Printf("cur = %v, resp = %v", len(c.List), len(resp.LastPrices))
-
 		c.lock.Lock()
 		for i := range resp.LastPrices {
 			if resp.LastPrices[i].Price != nil {
 				c.List[i].Units = resp.LastPrices[i].Price.Units
 				c.List[i].Nano = resp.LastPrices[i].Price.Nano
 			}
-			fmt.Printf("%v: %v.%v rub\n", c.List[i].Name, c.List[i].Units, SCurNano(c.List[i].Nano))
 		}
 		c.lock.Unlock()
 

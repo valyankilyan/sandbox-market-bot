@@ -142,6 +142,8 @@ func (b *Bot) HandleMessage(m Message) {
 		b.tinkoffToken(m, text)
 	case "/payin":
 		b.payIn(m, text)
+	case "/currencies":
+		b.sendCurrencies(m)
 	default:
 		b.notRecognized(m.Chat.ID)
 	}
