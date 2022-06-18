@@ -8,6 +8,7 @@ import (
 
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/config"
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/telegram"
+	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/tinkoff"
 	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/pkg/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -45,5 +46,6 @@ func main() {
 	)
 
 	bot := telegram.New(string(config.Conf.Telegram.Token), client, ctx)
+	tinkoff.Currencies.InitCurrencies()
 	bot.GetUpdates()
 }

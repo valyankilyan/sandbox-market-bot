@@ -27,7 +27,9 @@ type ConfigYaml struct {
 		Password string `yaml:"password"`
 	} `yaml:"database"`
 	Tinkoff struct {
-		Endpoint string `yaml:"endpoint"`
+		Endpoint     string `yaml:"endpoint"`
+		DefaultToken string `yaml:"defaultToken"`
+		UpdateTime   int32  `yaml:"updateTime"`
 	} `yaml:"tinkoff"`
 }
 
@@ -40,21 +42,13 @@ func ParseConfig(file []byte) error {
 		return fmt.Errorf("config.go %v", err)
 	}
 	Conf.Telegram = Telegram(cy.Telegram)
-	fmt.Printf(`Telegram Config:
-	offset = %v
-	limit = %v
-	timeout = %v
-	allowed_updates = %v
-`,
-		Conf.Telegram.GetUpdates.Offset,
-		Conf.Telegram.GetUpdates.Limit,
-		Conf.Telegram.GetUpdates.Timeout,
-		Conf.Telegram.GetUpdates.AllowedUpdates,
-	)
 
 	Conf.Database = Database(cy.Database)
 	Conf.Rpc = Rpc(cy.Rpc)
+
 	Conf.Tinkoff.Endpoint = cy.Tinkoff.Endpoint
+	Conf.Tinkoff.DefaultToken = cy.Tinkoff.DefaultToken
+	Conf.Tinkoff.UpdateTime = cy.Tinkoff.UpdateTime
 
 	return nil
 }

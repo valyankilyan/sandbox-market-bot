@@ -36,5 +36,5 @@ func (t *Tinkoff) PayIn(u int64, n int32) (units int64, nano int32, err error) {
 		os.Exit(3)
 	}
 
-	return spiresp.Balance.Units, spireq.Amount.Nano, err
+	return spiresp.Balance.Units, spiresp.Balance.Nano, err
 }
