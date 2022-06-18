@@ -27,6 +27,7 @@ type Currency struct {
 	Figi      string
 	Units     int64
 	Nano      int32
+	Lot       int32
 }
 
 func (c *CurrencyList) InitCurrencies() {
@@ -63,6 +64,7 @@ func (c *CurrencyList) InitCurrencies() {
 					Name:      cur.Name,
 					Shortname: cur.IsoCurrencyName,
 					Figi:      cur.Figi,
+					Lot:       cur.Lot,
 				},
 			)
 
@@ -105,6 +107,10 @@ func (c *CurrencyList) updateCurrencies() {
 		cancel()
 		time.Sleep(time.Duration(config.Conf.Tinkoff.UpdateTime) * time.Second)
 	}
+}
+
+func SCurPrice(units int64, nano int32) string {
+	return fmt.Sprintf("%v.%v", units, SCurNano(nano))
 }
 
 func SCurNano(nano int32) string {

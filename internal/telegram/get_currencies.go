@@ -14,13 +14,14 @@ var currencyNotFound string = `Ничего найти не получилось
 Попробуй /currencies, чтобы узнать короткие имена валют.`
 
 func formatCurrency(cur tinkoff.Currency) string {
-	return fmt.Sprintf("%v: %v.%v", cur.Name, cur.Units, tinkoff.SCurNano(cur.Nano))
+	return fmt.Sprintf("%v: %v", strings.ToUpper(cur.Shortname), tinkoff.SCurPrice(cur.Units, cur.Nano))
+	// return fmt.Sprintf("%v: %v.%v", cur.Name, cur.Units, tinkoff.SCurNano(cur.Nano))
 }
 
 func (b *Bot) sendCurrencies(m Message) {
 	cur_strings := make([]string, len(tinkoff.Currencies.List))
 	for i, cur := range tinkoff.Currencies.List {
-		cur_strings[i] = fmt.Sprintf("(%v) %v", cur.Shortname, formatCurrency(cur))
+		cur_strings[i] = fmt.Sprintf("%v", formatCurrency(cur))
 	}
 	msg := strings.Join(cur_strings, "\n")
 	b.SendMessage(m.Chat.ID, msg)
