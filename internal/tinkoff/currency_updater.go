@@ -49,7 +49,7 @@ func (c *CurrencyList) InitCurrencies() {
 	resp, err := client.Currencies(ctx, &ir)
 
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Printf("currency init %v\n", err.Error())
 		os.Exit(3)
 	}
 
@@ -67,7 +67,6 @@ func (c *CurrencyList) InitCurrencies() {
 					Lot:       cur.Lot,
 				},
 			)
-
 			c.figi = append(c.figi, cur.Figi)
 		}
 	}
@@ -91,7 +90,7 @@ func (c *CurrencyList) updateCurrencies() {
 		resp, err := client.GetLastPrices(ctx, &lpreq)
 
 		if err != nil {
-			fmt.Println(err.Error())
+			fmt.Printf("currency init %v\n", err.Error())
 			os.Exit(3)
 		}
 
@@ -124,6 +123,10 @@ func SCurNano(nano int32) string {
 }
 
 func GetCurrency(shortname string) (Currency, bool) {
+	shortname = strings.ToLower(shortname)
+	for _, cur := range Currencies.List {
+		fmt.Println(cur.Shortname)
+	}
 	for _, cur := range Currencies.List {
 		if cur.Shortname == shortname {
 			return cur, true

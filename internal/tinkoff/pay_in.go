@@ -32,7 +32,7 @@ func (t *Tinkoff) PayIn(u int64, n int32) (units int64, nano int32, err error) {
 
 	spiresp, err := client.SandboxPayIn(ctx, &spireq)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Printf("sandbox payin %v\n", err.Error())
 		os.Exit(3)
 	}
 

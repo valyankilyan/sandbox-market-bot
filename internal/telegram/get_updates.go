@@ -142,12 +142,8 @@ func (b *Bot) HandleMessage(m Message) {
 		b.tinkoffToken(m, text)
 	case "/payin":
 		b.payIn(m, text)
-	case "/currencies":
-		b.sendCurrencies(m)
 	case "/currency":
-		b.sendCurrency(m, text[1:])
-	case "/buycurrency":
-		b.buyCurrency(m, text[1:])
+		b.currency(m, text[1:])
 	case "/balance":
 		b.balance(m)
 	default:

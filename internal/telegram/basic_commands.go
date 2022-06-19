@@ -1,17 +1,24 @@
 package telegram
 
+import "fmt"
+
 const start = `
 С помощью этого бота можно играть в песочнице тинькофф инвестиций.
 Внесите свой токен и посмотрите, что вы сможете с этим сделать /help`
 
-const help = `
+const basic_help = `
 /start - старт и регистрация
 /help - помощь
 /tinkoff_token <token> - добавление токена песочницы
 /payin <units (uint)> <nano (uint optional)> - добавление рублей себе на счет (может быть отрицательным числом).
 Units - это рубли, nano - это копейки
-/currencies - курс валют
-/currency <shortname1>, ..., <shortname2> - курс выбранных валют`
+/balance - ваш баланс в валютах`
+
+var help string
+
+func init() {
+	help = fmt.Sprintf("%v\n%v", basic_help, currencyHelp)
+}
 
 func (b *Bot) sendStart(chat_id int64) {
 	b.SendMessage(chat_id, start)
