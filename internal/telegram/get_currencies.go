@@ -14,7 +14,8 @@ var currencyNotFound string = `Ничего найти не получилось
 Попробуй /currencies, чтобы узнать короткие имена валют.`
 
 func formatCurrency(cur tinkoff.Currency) string {
-	return fmt.Sprintf("%v: %v", strings.ToUpper(cur.Shortname), tinkoff.SCurPrice(cur.Units, cur.Nano))
+	return fmt.Sprintf("%v: %v", strings.ToUpper(cur.Shortname),
+		tinkoff.SCurPrice(tinkoff.Quotation{Units: cur.Units, Nano: cur.Nano}))
 	// return fmt.Sprintf("%v: %v.%v", cur.Name, cur.Units, tinkoff.SCurNano(cur.Nano))
 }
 

@@ -109,8 +109,12 @@ func (c *CurrencyList) updateCurrencies() {
 	}
 }
 
-func SCurPrice(units int64, nano int32) string {
-	return fmt.Sprintf("%v.%v", units, SCurNano(nano))
+func SCurPrice(q Quotation) string {
+	if q.Nano != 0 {
+		return fmt.Sprintf("%v.%v", q.Units, SCurNano(q.Nano))
+	} else {
+		return fmt.Sprintf("%v", q.Units)
+	}
 }
 
 func SCurNano(nano int32) string {
