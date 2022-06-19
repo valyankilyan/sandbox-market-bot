@@ -15,14 +15,17 @@ func (b *Bot) payIn(m Message, cmd []string) {
 		b.sendError(m.Chat.ID, "Кажется слишком много аргументов")
 	}
 
-	var units, nano uint64
-	units, err := strconv.ParseUint(cmd[1], 10, 64)
+	var units int64
+	var nano int32
+	units, err := strconv.ParseInt(cmd[1], 10, 64)
 	if err != nil {
-		b.sendError(m.Chat.ID, "Units не похоже на натуральное число")
+		b.sendError(m.Chat.ID, fmt.Sprintf("%v не похоже на целое число.", cmd[1]))
 	}
 	if len(cmd) == 3 {
-		if nano, err = strconv.ParseUint(cmd[2], 10, 64); err != nil {
-			b.sendError(m.Chat.ID, "Nano не похоже на натуральное число")
+		if nano64, err := strconv.ParseInt(cmd[2], 10, 32); err != nil {
+			b.sendError(m.Chat.ID, fmt.Sprintf("%v не похоже на целое число.", cmd[2]))
+		} else {
+			nano = int32(nano64)
 		}
 	}
 
@@ -31,9 +34,10 @@ func (b *Bot) payIn(m Message, cmd []string) {
 		b.sendError(m.Chat.ID, "Что-то пошло не так...")
 		return
 	}
-	units_out, nano_out, err := tinkoff.New(tt).PayIn(int64(units), int32(nano))
+	units_out, nano_out, err := tinkoff.New(tt).PayIn(units, nano)
 	if err != nil {
 		b.sendError(m.Chat.ID, "Что-то пошло не так...")
+		fmt.Printf("%v while paying in", err)
 		return
 	}
 	b.SendMessage(m.Chat.ID, fmt.Sprintf("У вас %v.%v рублей на счету.", units_out, nano_out))

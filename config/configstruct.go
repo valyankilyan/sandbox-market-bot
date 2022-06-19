@@ -23,7 +23,9 @@ type Rpc struct {
 }
 
 type Tinkoff struct {
-	Endpoint string
+	Endpoint     string
+	DefaultToken string
+	UpdateTime   int32
 }
 
 type Config struct {
