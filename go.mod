@@ -1,4 +1,4 @@
-module gitlab.ozon.dev/valyankilyan/homework-2-market-bot
+module github.com/valyankilyan/sandbox-market-bot
 
 go 1.18
 

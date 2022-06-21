@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/config"
+	"github.com/valyankilyan/sandbox-market-bot/config"
 )
 
 type JsonUpdates struct {

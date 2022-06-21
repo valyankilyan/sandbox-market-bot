@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/config"
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/models"
+	"github.com/valyankilyan/sandbox-market-bot/config"
+	"github.com/valyankilyan/sandbox-market-bot/internal/server/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )

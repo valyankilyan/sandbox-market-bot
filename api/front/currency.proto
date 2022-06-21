@@ -1,0 +1,6 @@
+syntax = "proto3";
+option go_package = "github.com/valyankilyan/sandbox-market-bot/api/front";
+
+package api;
+
+import "google/protobuf/empty.proto";

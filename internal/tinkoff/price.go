@@ -3,7 +3,7 @@ package tinkoff
 import (
 	"fmt"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/tinkoff/investapi"
+	"github.com/valyankilyan/sandbox-market-bot/internal/tinkoff/investapi"
 )
 
 func GetLastPrice(figi string) Quotation {

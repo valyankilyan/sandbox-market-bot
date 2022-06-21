@@ -5,7 +5,7 @@ import (
 	"math/rand"
 	"time"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/tinkoff/investapi"
+	"github.com/valyankilyan/sandbox-market-bot/internal/tinkoff/investapi"
 )
 
 type OrderDirection int32

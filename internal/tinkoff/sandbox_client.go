@@ -4,8 +4,8 @@ import (
 
 	// "github.com/ofen/tinkoff-invest-example/tinkoff/investapi"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/config"
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/tinkoff/investapi"
+	"github.com/valyankilyan/sandbox-market-bot/config"
+	"github.com/valyankilyan/sandbox-market-bot/internal/tinkoff/investapi"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

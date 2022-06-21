@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/tinkoff/investapi"
+	"github.com/valyankilyan/sandbox-market-bot/internal/tinkoff/investapi"
 )
 
 func (t *Tinkoff) PayIn(u int64, n int32) (units int64, nano int32, err error) {

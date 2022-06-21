@@ -3,7 +3,7 @@ package telegram
 import (
 	"log"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/pkg/api"
+	"github.com/valyankilyan/sandbox-market-bot/pkg/api"
 )
 
 func (b *Bot) createUser(usr User) {

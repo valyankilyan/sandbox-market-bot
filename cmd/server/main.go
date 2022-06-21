@@ -6,11 +6,11 @@ import (
 	"os"
 	"time"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/config"
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/db"
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/mw"
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/srv"
-	pb "gitlab.ozon.dev/valyankilyan/homework-2-market-bot/pkg/api"
+	"github.com/valyankilyan/sandbox-market-bot/config"
+	"github.com/valyankilyan/sandbox-market-bot/internal/server/db"
+	"github.com/valyankilyan/sandbox-market-bot/internal/server/mw"
+	"github.com/valyankilyan/sandbox-market-bot/internal/server/srv"
+	pb "github.com/valyankilyan/sandbox-market-bot/pkg/api"
 	"google.golang.org/grpc"
 )
 

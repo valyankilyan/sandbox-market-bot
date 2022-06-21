@@ -1,7 +1,7 @@
 package srv
 
 import (
-	pb "gitlab.ozon.dev/valyankilyan/homework-2-market-bot/pkg/api"
+	pb "github.com/valyankilyan/sandbox-market-bot/pkg/api"
 	"gorm.io/gorm"
 )
 

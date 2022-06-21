@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/models"
-	pb "gitlab.ozon.dev/valyankilyan/homework-2-market-bot/pkg/api"
+	"github.com/valyankilyan/sandbox-market-bot/internal/server/models"
+	pb "github.com/valyankilyan/sandbox-market-bot/pkg/api"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"gorm.io/gorm"

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/tinkoff"
+	"github.com/valyankilyan/sandbox-market-bot/internal/tinkoff"
 )
 
 func (b *Bot) balance(m Message) {

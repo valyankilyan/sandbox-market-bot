@@ -1,6 +1,6 @@
 package tinkoff
 
-import "gitlab.ozon.dev/valyankilyan/homework-2-market-bot/config"
+import "github.com/valyankilyan/sandbox-market-bot/config"
 
 var defTink *Tinkoff
 
