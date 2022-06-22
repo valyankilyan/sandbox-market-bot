@@ -1,7 +1,7 @@
 syntax = "proto3";
-option go_package = "github.com/valyankilyan/sandbox-market-bot/api/front";
+option go_package = "github.com/valyankilyan/sandbox-market-bot/api/myinvest";
 
-package api;
+package myinvest_api;
 
 import "google/protobuf/empty.proto";
 
