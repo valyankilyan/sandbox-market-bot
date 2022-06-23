@@ -1,6 +1,6 @@
 package config
 
-type Telegram struct {
+type telegram struct {
 	Token      string
 	GetUpdates struct {
 		Offset         int64
@@ -10,27 +10,27 @@ type Telegram struct {
 	}
 }
 
-type Database struct {
+type database struct {
 	Host     string
 	Port     string
 	Username string
 	Password string
 }
 
-type Rpc struct {
+type rpc struct {
 	Host string
 	Port string
 }
 
-type Tinkoff struct {
+type tinkoff struct {
 	Endpoint     string
 	DefaultToken string
 	UpdateTime   int32
 }
 
-type Config struct {
-	Telegram Telegram
-	Database Database
-	Rpc      Rpc
-	Tinkoff  Tinkoff
-}
+// type Config struct {
+// 	Telegram Telegram
+// 	Database Database
+// 	Rpc      Rpc
+// 	Tinkoff  Tinkoff
+// }
