@@ -1,21 +1,21 @@
 package telegram
 
-type Message struct {
+type message struct {
 	MessageID int64
-	Chat      Chat
-	From      User
+	Chat      chat
+	From      user
 	Date      int64
 	Text      string
 }
 
-type Chat struct {
+type chat struct {
 	ID        int64
 	FirstName string
 	Username  string
 	Type      string
 }
 
-type User struct {
+type user struct {
 	ID           int64
 	IsBot        bool
 	FirstName    string

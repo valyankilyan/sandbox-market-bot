@@ -1,7 +1,5 @@
 package telegram
 
-import "fmt"
-
 const start = `
 С помощью этого бота можно играть в песочнице тинькофф инвестиций.
 Внесите свой токен и посмотрите, что вы сможете с этим сделать /help`
@@ -16,22 +14,22 @@ Units - это рубли, nano - это копейки
 
 var help string
 
-func init() {
-	help = fmt.Sprintf("%v\n%v", basic_help, currencyHelp)
+// func init() {
+// 	help = fmt.Sprintf("%v\n%v", basic_help, currencyHelp)
+// }
+
+func (b *TBot) sendStart(chat_id int64) {
+	// b.SendMessage(chat_id, start)
 }
 
-func (b *Bot) sendStart(chat_id int64) {
-	b.SendMessage(chat_id, start)
+func (b *TBot) sendHelp(chat_id int64) {
+	// b.SendMessage(chat_id, help)
 }
 
-func (b *Bot) sendHelp(chat_id int64) {
-	b.SendMessage(chat_id, help)
+func (b *TBot) notRecognized(chat_id int64) {
+	// b.SendMessage(chat_id, "Извини, я не понял, используй /help")
 }
 
-func (b *Bot) notRecognized(chat_id int64) {
-	b.SendMessage(chat_id, "Извини, я не понял, используй /help")
-}
-
-func (b *Bot) sendError(chat_id int64, err string) {
-	b.SendMessage(chat_id, err)
+func (b *TBot) sendError(chat_id int64, err string) {
+	// b.SendMessage(chat_id, err)
 }

@@ -13,10 +13,10 @@ import (
 func New() (*gorm.DB, error) {
 	dsn := fmt.Sprintf(
 		"host=%v port=%v user=%v password=%v dbname=marketbotdb sslmode=disable",
-		config.Conf.Database.Host,
-		config.Conf.Database.Port,
-		config.Conf.Database.Username,
-		config.Conf.Database.Password,
+		config.Database.Host,
+		config.Database.Port,
+		config.Database.Username,
+		config.Database.Password,
 	)
 	adp, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
