@@ -34,7 +34,7 @@ func (b *TBot) GetUpdates() (err error) {
 			continue
 		}
 
-		go b.getMessages(updates)
+		go b.getmessages(updates)
 
 		// changing offset after messages was read
 		if l := len(updates.Result); l != 0 {
@@ -72,11 +72,11 @@ func (b *TBot) urlUpdate() (url string, err error) {
 	return url, err
 }
 
-func (b *TBot) getMessages(updates jsonUpdates) error {
+func (b *TBot) getmessages(updates jsonUpdates) error {
 	messages := parseTelegramMsgResp(updates)
 
 	for _, m := range messages {
-		log.Printf("New message from %s: %s\n", m.From.Username, m.Text)
+		log.Printf("New Message from %s: %s\n", m.From.Username, m.Text)
 		go b.HandleMessage(m)
 	}
 
@@ -92,11 +92,11 @@ func (b *TBot) HandleMessage(m message) {
 	switch text[0] {
 	case "/start":
 		b.sendStart(m.Chat.ID)
-		// b.createUser(m.From)
+		b.server.CreateUser(m.From)
 	case "/help":
 		b.sendHelp(m.Chat.ID)
-	// case "/tinkoff_token":
-	// 	b.tinkoffToken(m, text)
+	case "/tinkoff_token":
+		b.tinkoffToken(m, text)
 	// case "/payin":
 	// 	b.payIn(m, text)
 	// case "/currency":
@@ -139,7 +139,7 @@ type jsonUpdates struct {
 	Result []struct {
 		UpdateID int64 `json:"update_id"`
 		Message  struct {
-			MessageID int64 `json:"message_id"`
+			MessageID int64 `json:"Message_id"`
 			From      struct {
 				ID           int64  `json:"id"`
 				IsBot        bool   `json:"is_bot"`
@@ -155,7 +155,7 @@ type jsonUpdates struct {
 			} `json:"chat"`
 			Date int64  `json:"date"`
 			Text string `json:"text"`
-		} `json:"message"`
+		} `json:"Message"`
 	} `json:"result"`
 }
 

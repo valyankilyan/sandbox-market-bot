@@ -1,34 +1,31 @@
 package telegram
 
 import (
-	"context"
 	"fmt"
 	"log"
 
-	srv "github.com/valyankilyan/sandbox-market-bot/pkg/server_api"
+	sc "github.com/valyankilyan/sandbox-market-bot/internal/telegram/server_client"
 )
 
 type Bot interface {
-	New(token string, client srv.UserServiceClient, ctx context.Context)
+	New(token string)
 }
 
 type TBot struct {
 	token  string
-	client srv.UserServiceClient
-	ctx    context.Context
+	server *sc.Server
 }
 
 var apiAddr string = "https://api.telegram.org/bot%s/%s"
 
-func New(token string, client srv.UserServiceClient, ctx context.Context) *TBot {
+func New(token string, server *sc.Server) *TBot {
 	if token == "" {
 		log.Fatal("No telegram token was given.")
 	}
 
 	return &TBot{
 		token:  token,
-		client: client,
-		ctx:    ctx,
+		server: server,
 	}
 }
 
