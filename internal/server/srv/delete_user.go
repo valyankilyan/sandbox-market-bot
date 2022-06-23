@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/valyankilyan/sandbox-market-bot/internal/server/models"
-	pb "github.com/valyankilyan/sandbox-market-bot/pkg/api"
+	pb "github.com/valyankilyan/sandbox-market-bot/pkg/server_api"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"

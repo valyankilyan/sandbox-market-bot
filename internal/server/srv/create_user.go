@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/valyankilyan/sandbox-market-bot/internal/server/models"
-	pb "github.com/valyankilyan/sandbox-market-bot/pkg/api"
+	pb "github.com/valyankilyan/sandbox-market-bot/pkg/server_api"
 )
 
 func (t *tserver) CreateUser(ctx context.Context, usr *pb.User) (*pb.Id, error) {

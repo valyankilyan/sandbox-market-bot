@@ -10,7 +10,7 @@ import (
 	"github.com/valyankilyan/sandbox-market-bot/internal/server/db"
 	"github.com/valyankilyan/sandbox-market-bot/internal/server/mw"
 	"github.com/valyankilyan/sandbox-market-bot/internal/server/srv"
-	pb "github.com/valyankilyan/sandbox-market-bot/pkg/api"
+	pb "github.com/valyankilyan/sandbox-market-bot/pkg/server_api"
 	"google.golang.org/grpc"
 )
 
@@ -48,7 +48,7 @@ func main() {
 	}
 
 	grpcServer := grpc.NewServer(opts...)
-	pb.RegisterMarketBotServer(grpcServer, newServer)
+	pb.RegisterUserServiceServer(grpcServer, newServer)
 	err = grpcServer.Serve(lis)
 	if err != nil {
 		panic(err)
