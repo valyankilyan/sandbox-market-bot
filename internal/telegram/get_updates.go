@@ -89,12 +89,12 @@ func (b *TBot) HandleMessage(m message) {
 		b.notRecognized(m.Chat.ID)
 	}
 
-	// switch text[0] {
-	// case "/start":
-	// 	b.sendStart(m.Chat.ID)
-	// 	b.createUser(m.From)
-	// case "/help":
-	// 	b.sendHelp(m.Chat.ID)
+	switch text[0] {
+	case "/start":
+		b.sendStart(m.Chat.ID)
+		// b.createUser(m.From)
+	case "/help":
+		b.sendHelp(m.Chat.ID)
 	// case "/tinkoff_token":
 	// 	b.tinkoffToken(m, text)
 	// case "/payin":
@@ -103,9 +103,9 @@ func (b *TBot) HandleMessage(m message) {
 	// 	b.currency(m, text[1:])
 	// case "/balance":
 	// 	b.balance(m)
-	// default:
-	// 	b.notRecognized(m.Chat.ID)
-	// }
+	default:
+		b.notRecognized(m.Chat.ID)
+	}
 }
 
 func parseTelegramMsgResp(updates jsonUpdates) []message {
