@@ -8,12 +8,12 @@ import "api/myinvestapi/currency.proto";
 
 
 message TinkoffToken {
-    string Token = 2;
+    string Token = 1;
 }
 
 message PayinRequest {
     TinkoffToken Token = 1;
-    MoneyValue MoneyValue = 2;
+    MoneyValue Quantity = 2;
 }
 
 service MyInvestService {

@@ -8,6 +8,7 @@ import (
 
 	"github.com/valyankilyan/sandbox-market-bot/config"
 	"github.com/valyankilyan/sandbox-market-bot/internal/telegram"
+	sc "github.com/valyankilyan/sandbox-market-bot/internal/telegram/server_client"
 	srv "github.com/valyankilyan/sandbox-market-bot/pkg/server_api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -35,7 +36,9 @@ func main() {
 		"when", time.Now().Format(time.RFC3339),
 	)
 
-	bot := telegram.New(string(config.Telegram.Token), client, ctx)
+	server_client := sc.New(client, ctx)
+
+	bot := telegram.New(string(config.Telegram.Token), server_client)
 	// tinkoff.DefTinkInit()
 	// tinkoff.Currencies.InitCurrencies()
 	bot.GetUpdates()

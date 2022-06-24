@@ -35,6 +35,7 @@ func main() {
 		config.Myinvest.Host = myinvest_host
 	}
 	config.Myinvest.Host = config.Myinvest.Host + ":" + config.Myinvest.Port
+	log.Println("MyinvestServer listents on", config.Myinvest.Host)
 
 	// init myinvest server
 	myinvestServer := myinvest.New(invest_client)
