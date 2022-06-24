@@ -26,6 +26,7 @@ type MyInvestServiceClient interface {
 	UpdateTinkoffToken(ctx context.Context, in *TinkoffToken, opts ...grpc.CallOption) (*empty.Empty, error)
 	PayIn(ctx context.Context, in *PayinRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	GetCurrencies(ctx context.Context, in *CurrencyRequest, opts ...grpc.CallOption) (*CurrencyList, error)
+	GetAllCurrencies(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CurrencyList, error)
 }
 
 type myInvestServiceClient struct {
@@ -63,6 +64,15 @@ func (c *myInvestServiceClient) GetCurrencies(ctx context.Context, in *CurrencyR
 	return out, nil
 }
 
+func (c *myInvestServiceClient) GetAllCurrencies(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CurrencyList, error) {
+	out := new(CurrencyList)
+	err := c.cc.Invoke(ctx, "/myinvestapi.MyInvestService/GetAllCurrencies", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MyInvestServiceServer is the server API for MyInvestService service.
 // All implementations must embed UnimplementedMyInvestServiceServer
 // for forward compatibility
@@ -70,6 +80,7 @@ type MyInvestServiceServer interface {
 	UpdateTinkoffToken(context.Context, *TinkoffToken) (*empty.Empty, error)
 	PayIn(context.Context, *PayinRequest) (*empty.Empty, error)
 	GetCurrencies(context.Context, *CurrencyRequest) (*CurrencyList, error)
+	GetAllCurrencies(context.Context, *empty.Empty) (*CurrencyList, error)
 	mustEmbedUnimplementedMyInvestServiceServer()
 }
 
@@ -85,6 +96,9 @@ func (UnimplementedMyInvestServiceServer) PayIn(context.Context, *PayinRequest) 
 }
 func (UnimplementedMyInvestServiceServer) GetCurrencies(context.Context, *CurrencyRequest) (*CurrencyList, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCurrencies not implemented")
+}
+func (UnimplementedMyInvestServiceServer) GetAllCurrencies(context.Context, *empty.Empty) (*CurrencyList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllCurrencies not implemented")
 }
 func (UnimplementedMyInvestServiceServer) mustEmbedUnimplementedMyInvestServiceServer() {}
 
@@ -153,6 +167,24 @@ func _MyInvestService_GetCurrencies_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MyInvestService_GetAllCurrencies_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(empty.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MyInvestServiceServer).GetAllCurrencies(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/myinvestapi.MyInvestService/GetAllCurrencies",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MyInvestServiceServer).GetAllCurrencies(ctx, req.(*empty.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MyInvestService_ServiceDesc is the grpc.ServiceDesc for MyInvestService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -171,6 +203,10 @@ var MyInvestService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetCurrencies",
 			Handler:    _MyInvestService_GetCurrencies_Handler,
+		},
+		{
+			MethodName: "GetAllCurrencies",
+			Handler:    _MyInvestService_GetAllCurrencies_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

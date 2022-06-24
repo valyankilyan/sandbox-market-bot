@@ -20,4 +20,5 @@ service MyInvestService {
     rpc UpdateTinkoffToken(TinkoffToken) returns (google.protobuf.Empty);
     rpc PayIn(PayinRequest) returns (google.protobuf.Empty);
     rpc GetCurrencies(CurrencyRequest) returns (CurrencyList);
+    rpc GetAllCurrencies(google.protobuf.Empty) returns (CurrencyList);
 }
