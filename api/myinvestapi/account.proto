@@ -1,0 +1,23 @@
+syntax = "proto3";
+option go_package = "github.com/valyankilyan/sandbox-market-bot/api/myinvestapi";
+
+package myinvestapi;
+
+import "google/protobuf/empty.proto";
+import "api/myinvestapi/currency.proto";
+
+
+message TinkoffToken {
+    string Token = 2;
+}
+
+message PayinRequest {
+    TinkoffToken Token = 1;
+    MoneyValue MoneyValue = 2;
+}
+
+service MyInvestService {
+    rpc UpdateTinkoffToken(TinkoffToken) returns (google.protobuf.Empty);
+    rpc PayIn(PayinRequest) returns (google.protobuf.Empty);
+    rpc GetCurrencies(CurrencyRequest) returns (CurrencyList);
+}

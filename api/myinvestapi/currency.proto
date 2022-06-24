@@ -1,13 +1,15 @@
 syntax = "proto3";
-option go_package = "github.com/valyankilyan/sandbox-market-bot/api/myinvest";
+option go_package = "github.com/valyankilyan/sandbox-market-bot/api/myinvestapi";
 
-package myinvest_api;
-
-import "google/protobuf/empty.proto";
-import "api/myinvest/account.proto";
+package myinvestapi;
 
 message CurrencyRequest {
     repeated string ShortName = 1;
+}
+
+message MoneyValue {
+    int64 Units = 1;
+    int32 Nano = 2;
 }
 
 message Currency {
@@ -19,10 +21,6 @@ message Currency {
 
 message CurrencyList {
     repeated Currency Currencies = 1;
-}
-
-service CurrenciesService {
-    rpc GetCurrencies(CurrencyRequest) returns (CurrencyList);
 }
 
 // message Balance {
