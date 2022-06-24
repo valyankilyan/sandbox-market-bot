@@ -27,9 +27,6 @@ func main() {
 		log.Fatal("can't parse config file", err)
 	}
 
-	// init investClient
-	invest_client := invest_client.New(config.Tinkoff.DefaultToken)
-
 	// change myinvest_host if it is in env
 	if myinvest_host := os.Getenv("MYINVEST_HOST"); myinvest_host != "" {
 		config.Myinvest.Host = myinvest_host
@@ -37,8 +34,14 @@ func main() {
 	config.Myinvest.Host = config.Myinvest.Host + ":" + config.Myinvest.Port
 	log.Println("MyinvestServer listents on", config.Myinvest.Host)
 
-	// init myinvest server
-	myinvestServer := myinvest.New(invest_client)
+	// init CurrencyProcessor
+	currency_processor :=
+		invest_client.NewInvestCurrencyProcessor(config.Tinkoff.DefaultToken)
+
+	// init InvestClientProcessor
+	invest_client_processor := invest_client.NewInvestClient()
+
+	myinvestServer := myinvest.New(currency_processor, invest_client_processor)
 	listener, err := net.Listen("tcp", config.Myinvest.Host)
 	if err != nil {
 		panic(err)

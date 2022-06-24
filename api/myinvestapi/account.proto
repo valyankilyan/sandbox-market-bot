@@ -13,11 +13,10 @@ message TinkoffToken {
 
 message PayinRequest {
     TinkoffToken Token = 1;
-    MoneyValue Quantity = 2;
+    Quantity Quantity = 2;
 }
 
 service MyInvestService {
-    rpc UpdateTinkoffToken(TinkoffToken) returns (google.protobuf.Empty);
     rpc PayIn(PayinRequest) returns (google.protobuf.Empty);
     rpc GetCurrencies(CurrencyRequest) returns (CurrencyList);
     rpc GetAllCurrencies(google.protobuf.Empty) returns (CurrencyList);

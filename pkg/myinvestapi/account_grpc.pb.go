@@ -23,7 +23,6 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MyInvestServiceClient interface {
-	UpdateTinkoffToken(ctx context.Context, in *TinkoffToken, opts ...grpc.CallOption) (*empty.Empty, error)
 	PayIn(ctx context.Context, in *PayinRequest, opts ...grpc.CallOption) (*empty.Empty, error)
 	GetCurrencies(ctx context.Context, in *CurrencyRequest, opts ...grpc.CallOption) (*CurrencyList, error)
 	GetAllCurrencies(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CurrencyList, error)
@@ -35,15 +34,6 @@ type myInvestServiceClient struct {
 
 func NewMyInvestServiceClient(cc grpc.ClientConnInterface) MyInvestServiceClient {
 	return &myInvestServiceClient{cc}
-}
-
-func (c *myInvestServiceClient) UpdateTinkoffToken(ctx context.Context, in *TinkoffToken, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/myinvestapi.MyInvestService/UpdateTinkoffToken", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
 }
 
 func (c *myInvestServiceClient) PayIn(ctx context.Context, in *PayinRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
@@ -77,7 +67,6 @@ func (c *myInvestServiceClient) GetAllCurrencies(ctx context.Context, in *empty.
 // All implementations must embed UnimplementedMyInvestServiceServer
 // for forward compatibility
 type MyInvestServiceServer interface {
-	UpdateTinkoffToken(context.Context, *TinkoffToken) (*empty.Empty, error)
 	PayIn(context.Context, *PayinRequest) (*empty.Empty, error)
 	GetCurrencies(context.Context, *CurrencyRequest) (*CurrencyList, error)
 	GetAllCurrencies(context.Context, *empty.Empty) (*CurrencyList, error)
@@ -88,9 +77,6 @@ type MyInvestServiceServer interface {
 type UnimplementedMyInvestServiceServer struct {
 }
 
-func (UnimplementedMyInvestServiceServer) UpdateTinkoffToken(context.Context, *TinkoffToken) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UpdateTinkoffToken not implemented")
-}
 func (UnimplementedMyInvestServiceServer) PayIn(context.Context, *PayinRequest) (*empty.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PayIn not implemented")
 }
@@ -111,24 +97,6 @@ type UnsafeMyInvestServiceServer interface {
 
 func RegisterMyInvestServiceServer(s grpc.ServiceRegistrar, srv MyInvestServiceServer) {
 	s.RegisterService(&MyInvestService_ServiceDesc, srv)
-}
-
-func _MyInvestService_UpdateTinkoffToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TinkoffToken)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MyInvestServiceServer).UpdateTinkoffToken(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/myinvestapi.MyInvestService/UpdateTinkoffToken",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MyInvestServiceServer).UpdateTinkoffToken(ctx, req.(*TinkoffToken))
-	}
-	return interceptor(ctx, in, info, handler)
 }
 
 func _MyInvestService_PayIn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -192,10 +160,6 @@ var MyInvestService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "myinvestapi.MyInvestService",
 	HandlerType: (*MyInvestServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "UpdateTinkoffToken",
-			Handler:    _MyInvestService_UpdateTinkoffToken_Handler,
-		},
 		{
 			MethodName: "PayIn",
 			Handler:    _MyInvestService_PayIn_Handler,
