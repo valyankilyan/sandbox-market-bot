@@ -22,6 +22,11 @@ type rpc struct {
 	Port string
 }
 
+type myinvest struct {
+	Host string
+	Port string
+}
+
 type tinkoff struct {
 	Endpoint     string
 	DefaultToken string

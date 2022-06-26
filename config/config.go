@@ -20,6 +20,10 @@ type configYaml struct {
 		Host string `yaml:"host"`
 		Port string `yaml:"port"`
 	} `yaml:"rpc"`
+	Myinvest struct {
+		Host string `yaml:"host"`
+		Port string `yaml:"port"`
+	} `yaml:"myinvest"`
 	Database struct {
 		Host     string `yaml:"host"`
 		Port     string `yaml:"port"`
@@ -36,6 +40,7 @@ type configYaml struct {
 var Telegram telegram
 var Database database
 var Rpc rpc
+var Myinvest myinvest
 var Tinkoff tinkoff
 
 func ParseConfig(file []byte) error {
@@ -48,6 +53,7 @@ func ParseConfig(file []byte) error {
 
 	Database = database(cy.Database)
 	Rpc = rpc(cy.Rpc)
+	Myinvest = myinvest(cy.Myinvest)
 
 	Tinkoff.Endpoint = cy.Tinkoff.Endpoint
 	Tinkoff.DefaultToken = cy.Tinkoff.DefaultToken

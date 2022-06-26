@@ -1,0 +1,29 @@
+syntax = "proto3";
+option go_package = "github.com/valyankilyan/sandbox-market-bot/api/myinvestapi";
+
+package myinvestapi;
+
+message CurrencyRequest {
+    repeated string ShortName = 1;
+}
+
+message Quotation {
+    int64 Units = 1;
+    int32 Nano = 2;
+}
+
+message Currency {
+    string ShortName = 1;
+    string Name = 2;
+    Quotation Price = 3;
+    int32 Lot = 4;
+}
+
+message CurrencyList {
+    repeated Currency Currencies = 1;
+}
+
+// message Balance {
+//     MoneyValue TotalAmount = 1;
+
+// }
