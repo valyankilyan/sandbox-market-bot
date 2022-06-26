@@ -1,6 +1,8 @@
 package invest_client
 
-import "log"
+import (
+	"log"
+)
 
 type InvestClient struct{}
 

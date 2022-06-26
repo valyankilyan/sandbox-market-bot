@@ -1,104 +1,132 @@
 package invest_client
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"sync"
+	"time"
 
+	"github.com/valyankilyan/sandbox-market-bot/config"
 	"github.com/valyankilyan/sandbox-market-bot/internal/myinvest"
+	"github.com/valyankilyan/sandbox-market-bot/pkg/investapi"
 )
 
 type InvestCurrencyProcessor struct {
-	token string
-	list  []myinvest.Currency
-	figi  []string
-	lock  sync.Mutex
+	token      string
+	curlist    []myinvest.Currency
+	curfigi    []string
+	lastUpdate time.Time
+	lock       sync.Mutex
 }
 
 func NewInvestCurrencyProcessor(token string) *InvestCurrencyProcessor {
+	cp := InvestCurrencyProcessor{token: token}
+	cp.initCurrencies()
 	log.Println("New investcurrencyproccessor")
-	return &InvestCurrencyProcessor{token: token}
-	// ctx, cancel := cp.client.getContext()
-	// defer cancel()
-
-	// conn, err := defTink.getClientConn()
-	// if err != nil {
-	// 	fmt.Println(err.Error())
-	// 	return
-	// }
-
-	// client := investapi.NewInstrumentsServiceClient(conn)
-
-	// ir := investapi.InstrumentsRequest{
-	// 	InstrumentStatus: investapi.InstrumentStatus_INSTRUMENT_STATUS_UNSPECIFIED,
-	// }
-
-	// resp, err := client.Currencies(ctx, &ir)
-
-	// if err != nil {
-	// 	fmt.Printf("currency init %v\n", err.Error())
-	// 	os.Exit(3)
-	// }
-
-	// c.List = make([]currency, 0)
-	// c.figi = make([]string, 0)
-
-	// for _, cur := range resp.Instruments {
-	// 	if cur.IsoCurrencyName != "rub" {
-	// 		c.List = append(
-	// 			c.List,
-	// 			currency{
-	// 				Name:      cur.Name,
-	// 				Shortname: cur.IsoCurrencyName,
-	// 				Figi:      cur.Figi,
-	// 				Lot:       cur.Lot,
-	// 			},
-	// 		)
-	// 		c.figi = append(c.figi, cur.Figi)
-	// 	}
-	// }
-	// go c.updateCurrencies()
+	return &cp
 }
 
 func (cp *InvestCurrencyProcessor) All() []myinvest.Currency {
-	log.Println("All currencies from icp")
-	return []myinvest.Currency{}
+	cp.updateCurrencies()
+	return cp.curlist
 }
-func (cp *InvestCurrencyProcessor) Get(curlist []string) []myinvest.Currency {
-	log.Println("Currencies", curlist, "from icp")
-	return []myinvest.Currency{}
+
+func (cp *InvestCurrencyProcessor) Get(curnames []string) []myinvest.Currency {
+	cp.updateCurrencies()
+	resp := []myinvest.Currency{}
+
+	for _, name := range curnames {
+		for _, cur := range cp.curlist {
+			if name == cur.ShortName {
+				resp = append(resp, cur)
+			}
+		}
+	}
+	return resp
+}
+
+func (cp *InvestCurrencyProcessor) initCurrencies() {
+	log.Println("All currencies from icp")
+	ctx, cancel := getContext(cp.token)
+	defer cancel()
+
+	conn, err := getClientConn()
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(3)
+	}
+
+	client := investapi.NewInstrumentsServiceClient(conn)
+
+	ir := investapi.InstrumentsRequest{
+		InstrumentStatus: investapi.InstrumentStatus_INSTRUMENT_STATUS_UNSPECIFIED,
+	}
+
+	resp, err := client.Currencies(ctx, &ir)
+
+	if err != nil {
+		fmt.Printf("curProcessor All %v\n", err.Error())
+		os.Exit(3)
+	}
+
+	// cp.curlist = make([]myinvest.Currency, len(resp.Instruments))
+	// cp.curfigi = make([]string, len(resp.Instruments))
+	for _, c := range resp.Instruments {
+		if c.Currency != "rub" || c.IsoCurrencyName == "rub" {
+			continue
+		}
+		cp.curlist = append(cp.curlist, myinvest.Currency{
+			Name:      c.Name,
+			ShortName: c.IsoCurrencyName,
+			Figi:      c.Figi,
+			Lot:       c.Lot,
+		})
+		cp.curfigi = append(cp.curfigi, c.Figi)
+	}
+	cp.updateCurrencies()
 }
 
 func (cp *InvestCurrencyProcessor) updateCurrencies() {
-	// for {
-	// 	ctx, cancel := defTink.getContext()
+	fmt.Println("now - last update", time.Now().Sub(cp.lastUpdate))
+	fmt.Println("updatetime", time.Duration(config.Tinkoff.UpdateTime)*time.Second)
+	fmt.Println(time.Now().Sub(cp.lastUpdate) > time.Duration(config.Tinkoff.UpdateTime)*time.Second)
+	if !(time.Now().Sub(cp.lastUpdate) > time.Duration(config.Tinkoff.UpdateTime)*time.Second) {
+		return
+	}
+	log.Println("updateCurrencies")
+	cp.lastUpdate = time.Now()
 
-	// 	conn, err := defTink.getClientConn()
-	// 	if err != nil {
-	// 		fmt.Println(err.Error())
-	// 		return
-	// 	}
-	// 	client := investapi.NewMarketDataServiceClient(conn)
-	// 	lpreq := investapi.GetLastPricesRequest{
-	// 		Figi: c.figi,
-	// 	}
+	ctx, cancel := getContext(cp.token)
+	defer cancel()
 
-	// 	resp, err := client.GetLastPrices(ctx, &lpreq)
+	conn, err := getClientConn()
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(3)
+	}
+	client := investapi.NewMarketDataServiceClient(conn)
+	lpreq := investapi.GetLastPricesRequest{
+		Figi: cp.curfigi,
+	}
 
-	// 	if err != nil {
-	// 		fmt.Printf("currency init %v\n", err.Error())
-	// 		os.Exit(3)
-	// 	}
+	resp, err := client.GetLastPrices(ctx, &lpreq)
 
-	// 	c.lock.Lock()
-	// 	for i := range resp.LastPrices {
-	// 		if resp.LastPrices[i].Price != nil {
-	// 			c.List[i].Units = resp.LastPrices[i].Price.Units
-	// 			c.List[i].Nano = resp.LastPrices[i].Price.Nano
-	// 		}
-	// 	}
-	// 	c.lock.Unlock()
+	if err != nil {
+		fmt.Printf("update currencys %v\n", err.Error())
+		return
+	}
 
-	// 	cancel()
-	// 	time.Sleep(time.Duration(config.Tinkoff.UpdateTime) * time.Second)
-	// }
+	cp.lock.Lock()
+	for i, lp := range resp.LastPrices {
+		if resp.LastPrices[i].Price != nil {
+			cp.curlist[i].Price = myinvest.Quotation{
+				Units: lp.Price.Units,
+				Nano:  lp.Price.Nano,
+			}
+		}
+	}
+	cp.lock.Unlock()
+
+	cancel()
 }

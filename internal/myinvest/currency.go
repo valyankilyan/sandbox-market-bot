@@ -12,7 +12,7 @@ func (srv *myinvestServer) GetCurrencies(ctx context.Context,
 	req *pb.CurrencyRequest) (*pb.CurrencyList, error) {
 
 	currencies := srv.curProcessor.Get(req.ShortName)
-
+	log.Println(currencies)
 	list := make([]*pb.Currency, len(currencies))
 	for i, c := range currencies {
 		list[i] = &pb.Currency{
@@ -29,6 +29,7 @@ func (srv *myinvestServer) GetCurrencies(ctx context.Context,
 func (srv *myinvestServer) GetAllCurrencies(ctx context.Context, empty *emptypb.Empty) (*pb.CurrencyList, error) {
 	// invest_client.
 	currencies := srv.curProcessor.All()
+	log.Println(currencies)
 	list := make([]*pb.Currency, len(currencies))
 	for i, c := range currencies {
 		list[i] = &pb.Currency{
