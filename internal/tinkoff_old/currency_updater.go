@@ -1,4 +1,4 @@
-package tinkoff
+package tinkoff_old
 
 import (
 	"fmt"
@@ -104,7 +104,7 @@ func (c *CurrencyList) updateCurrencies() {
 		c.lock.Unlock()
 
 		cancel()
-		time.Sleep(time.Duration(config.Conf.Tinkoff.UpdateTime) * time.Second)
+		time.Sleep(time.Duration(config.Tinkoff.UpdateTime) * time.Second)
 	}
 }
 

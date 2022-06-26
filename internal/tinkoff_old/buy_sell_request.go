@@ -1,4 +1,4 @@
-package tinkoff
+package tinkoff_old
 
 func (t *Tinkoff) BuyCurrencyMarket(cur Currency, quant int64) (bool, MoneyValue, error) {
 	lastPrice := GetLastPrice(cur.Figi)

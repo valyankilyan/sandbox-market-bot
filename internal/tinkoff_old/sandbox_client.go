@@ -1,4 +1,4 @@
-package tinkoff
+package tinkoff_old
 
 import (
 
@@ -14,7 +14,7 @@ import (
 
 func NewSandboxServiceClient(token string) investapi.SandboxServiceClient {
 	conn, err := grpc.Dial(
-		config.Conf.Tinkoff.Endpoint,
+		config.Tinkoff.Endpoint,
 		grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")),
 		grpc.WithPerRPCCredentials(oauth.NewOauthAccess(&oauth2.Token{AccessToken: token})),
 	)

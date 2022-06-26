@@ -1,4 +1,4 @@
-package telegram_old
+package mytinkoff_client
 
 import (
 	"fmt"

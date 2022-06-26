@@ -1,4 +1,4 @@
-package tinkoff
+package tinkoff_old
 
 import (
 	"context"
@@ -23,7 +23,7 @@ func (t *Tinkoff) GetAccounts() error {
 	)
 
 	conn, err := grpc.Dial(
-		config.Conf.Tinkoff.Endpoint,
+		config.Tinkoff.Endpoint,
 		grpc.WithTransportCredentials(credentials.NewClientTLSFromCert(nil, "")),
 	)
 

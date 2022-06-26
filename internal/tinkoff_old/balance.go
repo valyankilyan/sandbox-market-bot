@@ -1,9 +1,9 @@
-package tinkoff
+package tinkoff_old
 
 import (
 	"fmt"
 
-	"github.com/valyankilyan/sandbox-market-bot/internal/tinkoff/investapi"
+	"github.com/valyankilyan/sandbox-market-bot/pkg/investapi"
 )
 
 type Balance struct {

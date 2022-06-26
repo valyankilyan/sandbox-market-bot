@@ -1,11 +1,11 @@
-package tinkoff
+package tinkoff_old
 
 import "github.com/valyankilyan/sandbox-market-bot/config"
 
 var defTink *Tinkoff
 
 func DefTinkInit() {
-	defTink = New(config.Conf.Tinkoff.DefaultToken)
+	defTink = New(config.Tinkoff.DefaultToken)
 }
 
 type Tinkoff struct {

@@ -1,4 +1,4 @@
-package tinkoff
+package tinkoff_old
 
 import (
 	"fmt"
