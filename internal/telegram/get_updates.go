@@ -119,7 +119,7 @@ func parseTelegramMsgResp(updates jsonUpdates) []message {
 		msg.Chat.Username = r.Message.Chat.Username
 		msg.Chat.Type = r.Message.Chat.Type
 
-		msg.From.ID = r.Message.From.ID
+		msg.From.TgId = r.Message.From.ID
 		msg.From.IsBot = r.Message.From.IsBot
 		msg.From.FirstName = r.Message.From.FirstName
 		msg.From.Username = r.Message.From.Username
