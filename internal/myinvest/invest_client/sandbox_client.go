@@ -8,7 +8,7 @@ import (
 
 // "github.com/ofen/tinkoff-invest-example/tinkoff/investapi"
 
-func (ic *InvestClient) PayIn(token string, quantity myinvest.Quotation) error {
+func (ic *InvestClient) PayIn(token string, quantity myinvest.Quotation) (myinvest.Quotation, error) {
 	log.Println("Payin from invest_client")
-	return nil
+	return quantity, nil
 }

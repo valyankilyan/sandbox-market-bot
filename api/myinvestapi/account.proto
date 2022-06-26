@@ -5,6 +5,7 @@ package myinvestapi;
 
 import "google/protobuf/empty.proto";
 import "api/myinvestapi/currency.proto";
+// import "currency.proto";
 
 
 message TinkoffToken {
@@ -13,11 +14,11 @@ message TinkoffToken {
 
 message PayinRequest {
     TinkoffToken Token = 1;
-    Quantity Quantity = 2;
+    Quotation Quantity = 2;
 }
 
 service MyInvestService {
-    rpc PayIn(PayinRequest) returns (google.protobuf.Empty);
+    rpc PayIn(PayinRequest) returns (Quotation);
     rpc GetCurrencies(CurrencyRequest) returns (CurrencyList);
     rpc GetAllCurrencies(google.protobuf.Empty) returns (CurrencyList);
 }

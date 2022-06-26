@@ -7,7 +7,7 @@ message CurrencyRequest {
     repeated string ShortName = 1;
 }
 
-message Quantity {
+message Quotation {
     int64 Units = 1;
     int32 Nano = 2;
 }
@@ -15,7 +15,7 @@ message Quantity {
 message Currency {
     string ShortName = 1;
     string Name = 2;
-    Quantity Price = 3;
+    Quotation Price = 3;
     int32 Lot = 4;
 }
 

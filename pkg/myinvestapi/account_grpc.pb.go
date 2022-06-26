@@ -23,7 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type MyInvestServiceClient interface {
-	PayIn(ctx context.Context, in *PayinRequest, opts ...grpc.CallOption) (*empty.Empty, error)
+	PayIn(ctx context.Context, in *PayinRequest, opts ...grpc.CallOption) (*Quotation, error)
 	GetCurrencies(ctx context.Context, in *CurrencyRequest, opts ...grpc.CallOption) (*CurrencyList, error)
 	GetAllCurrencies(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*CurrencyList, error)
 }
@@ -36,8 +36,8 @@ func NewMyInvestServiceClient(cc grpc.ClientConnInterface) MyInvestServiceClient
 	return &myInvestServiceClient{cc}
 }
 
-func (c *myInvestServiceClient) PayIn(ctx context.Context, in *PayinRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
+func (c *myInvestServiceClient) PayIn(ctx context.Context, in *PayinRequest, opts ...grpc.CallOption) (*Quotation, error) {
+	out := new(Quotation)
 	err := c.cc.Invoke(ctx, "/myinvestapi.MyInvestService/PayIn", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -67,7 +67,7 @@ func (c *myInvestServiceClient) GetAllCurrencies(ctx context.Context, in *empty.
 // All implementations must embed UnimplementedMyInvestServiceServer
 // for forward compatibility
 type MyInvestServiceServer interface {
-	PayIn(context.Context, *PayinRequest) (*empty.Empty, error)
+	PayIn(context.Context, *PayinRequest) (*Quotation, error)
 	GetCurrencies(context.Context, *CurrencyRequest) (*CurrencyList, error)
 	GetAllCurrencies(context.Context, *empty.Empty) (*CurrencyList, error)
 	mustEmbedUnimplementedMyInvestServiceServer()
@@ -77,7 +77,7 @@ type MyInvestServiceServer interface {
 type UnimplementedMyInvestServiceServer struct {
 }
 
-func (UnimplementedMyInvestServiceServer) PayIn(context.Context, *PayinRequest) (*empty.Empty, error) {
+func (UnimplementedMyInvestServiceServer) PayIn(context.Context, *PayinRequest) (*Quotation, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PayIn not implemented")
 }
 func (UnimplementedMyInvestServiceServer) GetCurrencies(context.Context, *CurrencyRequest) (*CurrencyList, error) {
