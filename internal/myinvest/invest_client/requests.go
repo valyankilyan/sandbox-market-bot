@@ -3,6 +3,7 @@ package invest_client
 import (
 	"context"
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/valyankilyan/sandbox-market-bot/config"
@@ -13,7 +14,7 @@ import (
 )
 
 func getContext(token string) (context.Context, context.CancelFunc) {
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*5)
 
 	ctx = metadata.NewOutgoingContext(
 		ctx,
@@ -34,7 +35,7 @@ func getClientConn() (*grpc.ClientConn, error) {
 func sandboxAccountId(ctx context.Context, client investapi.SandboxServiceClient) (string, error) {
 	resp, err := client.GetSandboxAccounts(ctx, &investapi.GetAccountsRequest{})
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println("sandboxAccountId", err.Error())
 		return "", err
 	}
 	// fmt.Println(resp)

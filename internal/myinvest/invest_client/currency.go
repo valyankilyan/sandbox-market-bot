@@ -53,7 +53,7 @@ func (cp *InvestCurrencyProcessor) initCurrencies() {
 
 	conn, err := getClientConn()
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println("initCurrencies", err.Error())
 		os.Exit(3)
 	}
 
@@ -102,7 +102,7 @@ func (cp *InvestCurrencyProcessor) updateCurrencies() {
 
 	conn, err := getClientConn()
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Println("updateCurrencies", err.Error())
 		os.Exit(3)
 	}
 	client := investapi.NewMarketDataServiceClient(conn)
