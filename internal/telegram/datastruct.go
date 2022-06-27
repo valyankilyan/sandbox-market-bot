@@ -1,11 +1,16 @@
 package telegram
 
-import "github.com/valyankilyan/sandbox-market-bot/internal/telegram/server_client"
-
-type message struct {
+type User struct {
+	TgId         int64
+	IsBot        bool
+	FirstName    string
+	Username     string
+	LanguageCode string
+}
+type Message struct {
 	MessageID int64
 	Chat      chat
-	From      server_client.User
+	From      User
 	Date      int64
 	Text      string
 }
@@ -15,4 +20,15 @@ type chat struct {
 	FirstName string
 	Username  string
 	Type      string
+}
+
+type Quotation struct {
+	Units int64
+	Nano  int32
+}
+type Currency struct {
+	Price     Quotation
+	ShortName string
+	Name      string
+	Lot       int32
 }

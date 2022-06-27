@@ -16,6 +16,7 @@ import (
 )
 
 func main() {
+	log.Println("starting MYINVEST")
 	//parse config
 	b, err := os.ReadFile("./config/config.yaml")
 	if err != nil {

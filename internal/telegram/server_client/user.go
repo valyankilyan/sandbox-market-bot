@@ -3,35 +3,21 @@ package server_client
 import (
 	"log"
 
+	"github.com/valyankilyan/sandbox-market-bot/internal/telegram"
 	srv "github.com/valyankilyan/sandbox-market-bot/pkg/server_api"
 )
 
-func (s *Server) CreateUser(usr User) {
+func (s *Server) CreateUser(usr telegram.User) {
 	nwusr := srv.User{
 		Name:       usr.FirstName,
 		TgUserName: usr.Username,
-		TgId:       usr.ID,
+		TgId:       usr.TgId,
 	}
 
 	s.client.CreateUser(s.ctx, &nwusr)
 }
 
-func (s *Server) getUserByTg(user User) *srv.User {
-	usr, err := s.client.ReadUser(s.ctx, &srv.TgId{TgId: user.ID})
-	if err != nil {
-		log.Println("error in updateTinkofToken:", err)
-		return &srv.User{}
-	}
-	if usr == nil {
-		s.CreateUser(user)
-		// silly but i will change it
-		return s.getUserByTg(user)
-	}
-
-	return usr
-}
-
-func (s *Server) UpdateTinkoffToken(user User, token string) error {
+func (s *Server) UpdateTinkoffToken(user telegram.User, token string) error {
 	usr := s.getUserByTg(user)
 	usr.TinkoffToken = token
 	_, err := s.client.UpdateUser(s.ctx, usr)
@@ -39,8 +25,24 @@ func (s *Server) UpdateTinkoffToken(user User, token string) error {
 	return err
 }
 
-func (s *Server) ReadUserToken(user User) (token string, err error) {
-	usr, err := s.client.ReadUser(s.ctx, &srv.TgId{TgId: user.ID})
+func (s *Server) getUserByTg(user telegram.User) *srv.User {
+	usr, err := s.client.ReadUser(s.ctx, &srv.TgId{TgId: user.TgId})
+	if err != nil {
+		log.Println("error getting user by tgid:", err)
+		s.CreateUser(user)
+		// silly but i will change it
+		usr, err = s.client.ReadUser(s.ctx, &srv.TgId{TgId: user.TgId})
+		if err != nil {
+			log.Println("error again stop the process:", err)
+			return &srv.User{}
+		}
+	}
+
+	return usr
+}
+
+func (s *Server) UserToken(user telegram.User) (token string, err error) {
+	usr, err := s.client.ReadUser(s.ctx, &srv.TgId{TgId: user.TgId})
 	if err != nil {
 		log.Println("user don't have tinkoff token:", err)
 		return "", err

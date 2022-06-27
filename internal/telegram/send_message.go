@@ -9,7 +9,7 @@ import (
 )
 
 func (b *TBot) sendMessage(chatID int64, message string) error {
-	log.Printf("sending message %v to %v", message, chatID)
+	log.Printf("Message to %v: %v", chatID, message)
 	hc := http.Client{Timeout: 10 * time.Second}
 	req, err := b.requestURL("SendMessage")
 	if err != nil {

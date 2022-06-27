@@ -11,7 +11,7 @@ type Server struct {
 	ctx    context.Context
 }
 
-func New(client srv.UserServiceClient, ctx context.Context) *Server {
+func New(ctx context.Context, client srv.UserServiceClient) *Server {
 	return &Server{
 		client: client,
 		ctx:    ctx,

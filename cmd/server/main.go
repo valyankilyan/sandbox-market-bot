@@ -15,6 +15,7 @@ import (
 )
 
 func main() {
+	log.Println("Starting USER SERVER")
 	b, err := os.ReadFile("./config/config.yaml")
 	if err != nil {
 		log.Fatal(err)
@@ -47,6 +48,7 @@ func main() {
 		grpc.UnaryInterceptor(mw.LogInterceptor),
 	}
 
+	log.Println("User Service listens at", config.Rpc.Host)
 	grpcServer := grpc.NewServer(opts...)
 	pb.RegisterUserServiceServer(grpcServer, newServer)
 	err = grpcServer.Serve(lis)

@@ -11,10 +11,12 @@ const basic_help = `
 /help - помощь
 /tinkoff_token <token> - добавление токена песочницы
 /payin <units (uint)> <nano (uint optional)> - добавление рублей себе на счет (может быть отрицательным числом).
-Units - это рубли, nano - это копейки
-/balance - ваш баланс в валютах`
+Units - это рубли, nano - это копейки`
 
-const currencyHelp = "\nthere will be currency"
+// /balance - ваш баланс в валютах`
+
+const currencyHelp = `
+/currency <shortname>... - стоимость валют`
 
 var help string
 
