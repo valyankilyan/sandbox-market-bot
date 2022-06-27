@@ -8,11 +8,12 @@ import (
 type TBot struct {
 	token  string
 	server Server
+	invest Invest
 }
 
 var apiAddr string = "https://api.telegram.org/bot%s/%s"
 
-func New(token string, server Server) *TBot {
+func New(token string, server Server, invest Invest) *TBot {
 	if token == "" {
 		log.Fatal("No telegram token was given.")
 	}
@@ -20,6 +21,7 @@ func New(token string, server Server) *TBot {
 	return &TBot{
 		token:  token,
 		server: server,
+		invest: invest,
 	}
 }
 
@@ -36,5 +38,6 @@ type Server interface {
 }
 
 type Invest interface {
-	GetAllCurrencies() Currency
+	AllCurrencies() ([]Currency, error)
+	Currencies(shortnames []string) ([]Currency, error)
 }

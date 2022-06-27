@@ -3,8 +3,8 @@ package telegram
 import "log"
 
 func (b *TBot) tinkoffToken(m Message, cmd []string) {
-	if len(cmd) == 2 {
-		err := b.server.UpdateTinkoffToken(m.From, cmd[1])
+	if len(cmd) == 1 {
+		err := b.server.UpdateTinkoffToken(m.From, cmd[0])
 		if err != nil {
 			log.Println("cant't update token", err)
 			b.sendError(m.Chat.ID, "Что-то пошло не так...")

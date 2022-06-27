@@ -24,10 +24,11 @@ type chat struct {
 
 type Quotation struct {
 	Units int64
-	nano  int32
+	Nano  int32
 }
 type Currency struct {
 	Price     Quotation
 	ShortName string
 	Name      string
+	Lot       int32
 }
