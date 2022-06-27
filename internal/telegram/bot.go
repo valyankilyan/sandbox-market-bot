@@ -5,9 +5,6 @@ import (
 	"log"
 )
 
-type Bot interface {
-}
-
 type TBot struct {
 	token  string
 	server Server
@@ -36,4 +33,8 @@ func (b *TBot) requestURL(command string) (string, error) {
 type Server interface {
 	CreateUser(User)
 	UpdateTinkoffToken(user User, token string) error
+}
+
+type Invest interface {
+	GetAllCurrencies() Currency
 }

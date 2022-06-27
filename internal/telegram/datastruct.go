@@ -7,7 +7,7 @@ type User struct {
 	Username     string
 	LanguageCode string
 }
-type message struct {
+type Message struct {
 	MessageID int64
 	Chat      chat
 	From      User
@@ -20,4 +20,14 @@ type chat struct {
 	FirstName string
 	Username  string
 	Type      string
+}
+
+type Quotation struct {
+	Units int64
+	nano  int32
+}
+type Currency struct {
+	Price     Quotation
+	ShortName string
+	Name      string
 }

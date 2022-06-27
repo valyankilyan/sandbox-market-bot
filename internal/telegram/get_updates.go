@@ -11,7 +11,37 @@ import (
 	"github.com/valyankilyan/sandbox-market-bot/config"
 )
 
-func (b *TBot) GetUpdates() (err error) {
+func (b *TBot) HandleMessages(msgch chan Message) {
+	for {
+		msg := <-msgch
+
+		text := strings.Split(msg.Text, " ")
+		if len(text) == 0 {
+			go b.notRecognized(msg.Chat.ID)
+		}
+
+		switch text[0] {
+		case "/start":
+			go b.sendStart(msg.Chat.ID)
+			go b.server.CreateUser(msg.From)
+		case "/help":
+			go b.sendHelp(msg.Chat.ID)
+		case "/tinkoff_token":
+			go b.tinkoffToken(msg, text)
+		// case "/payin":
+		// 	b.payIn(m, text)
+		// case "/currency":
+		// 	b.currency(m, text[1:])
+		// case "/balance":
+		// 	b.balance(m)
+		default:
+			go b.notRecognized(msg.Chat.ID)
+		}
+	}
+
+}
+
+func (b *TBot) GetUpdates(msgch chan Message) {
 	hc := http.Client{Timeout: 10 * time.Second}
 
 	for {
@@ -34,9 +64,11 @@ func (b *TBot) GetUpdates() (err error) {
 			continue
 		}
 
-		go b.getmessages(updates)
+		for _, m := range parseTelegramMsgResp(updates) {
+			log.Printf("Message from %v (%v): %v\n", m.From.FirstName, m.From.Username, m.Text)
+			msgch <- m
+		}
 
-		// changing offset after messages was read
 		if l := len(updates.Result); l != 0 {
 			config.Telegram.GetUpdates.Offset = updates.Result[l-1].UpdateID + 1
 		}
@@ -72,46 +104,10 @@ func (b *TBot) urlUpdate() (url string, err error) {
 	return url, err
 }
 
-func (b *TBot) getmessages(updates jsonUpdates) error {
-	messages := parseTelegramMsgResp(updates)
-
-	for _, m := range messages {
-		log.Printf("New Message from %s: %s\n", m.From.Username, m.Text)
-		go b.HandleMessage(m)
-	}
-
-	return nil
-}
-
-func (b *TBot) HandleMessage(m message) {
-	text := strings.Split(m.Text, " ")
-	if len(text) == 0 {
-		b.notRecognized(m.Chat.ID)
-	}
-
-	switch text[0] {
-	case "/start":
-		b.sendStart(m.Chat.ID)
-		b.server.CreateUser(m.From)
-	case "/help":
-		b.sendHelp(m.Chat.ID)
-	case "/tinkoff_token":
-		b.tinkoffToken(m, text)
-	// case "/payin":
-	// 	b.payIn(m, text)
-	// case "/currency":
-	// 	b.currency(m, text[1:])
-	// case "/balance":
-	// 	b.balance(m)
-	default:
-		b.notRecognized(m.Chat.ID)
-	}
-}
-
-func parseTelegramMsgResp(updates jsonUpdates) []message {
-	messages := make([]message, 0)
+func parseTelegramMsgResp(updates jsonUpdates) []Message {
+	messages := make([]Message, 0)
 	for _, r := range updates.Result {
-		var msg message
+		var msg Message
 		msg.MessageID = r.Message.MessageID
 
 		msg.Chat.ID = r.Message.Chat.ID

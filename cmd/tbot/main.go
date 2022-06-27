@@ -39,9 +39,13 @@ func main() {
 	server_client := sc.New(client, ctx)
 
 	bot := telegram.New(string(config.Telegram.Token), server_client)
-	// tinkoff.DefTinkInit()
-	// tinkoff.Currencies.InitCurrencies()
-	bot.GetUpdates()
+	msgch := make(chan telegram.Message, 20)
+	go bot.GetUpdates(msgch)
+	go bot.HandleMessages(msgch)
+
+	for {
+		time.Sleep(time.Hour)
+	}
 }
 
 func connection() *grpc.ClientConn {

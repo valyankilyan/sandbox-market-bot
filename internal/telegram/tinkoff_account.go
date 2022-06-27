@@ -2,7 +2,7 @@ package telegram
 
 import "log"
 
-func (b *TBot) tinkoffToken(m message, cmd []string) {
+func (b *TBot) tinkoffToken(m Message, cmd []string) {
 	if len(cmd) == 2 {
 		err := b.server.UpdateTinkoffToken(m.From, cmd[1])
 		if err != nil {
