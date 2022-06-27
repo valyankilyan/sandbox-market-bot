@@ -3,8 +3,8 @@ package srv
 import (
 	"context"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/models"
-	pb "gitlab.ozon.dev/valyankilyan/homework-2-market-bot/pkg/api"
+	"github.com/valyankilyan/sandbox-market-bot/internal/server/models"
+	pb "github.com/valyankilyan/sandbox-market-bot/pkg/server_api"
 )
 
 func (t *tserver) CreateUser(ctx context.Context, usr *pb.User) (*pb.Id, error) {

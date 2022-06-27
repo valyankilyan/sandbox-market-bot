@@ -6,7 +6,7 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type ConfigYaml struct {
+type configYaml struct {
 	Telegram struct {
 		Token      string `yaml:"token"`
 		GetUpdates struct {
@@ -20,6 +20,10 @@ type ConfigYaml struct {
 		Host string `yaml:"host"`
 		Port string `yaml:"port"`
 	} `yaml:"rpc"`
+	Myinvest struct {
+		Host string `yaml:"host"`
+		Port string `yaml:"port"`
+	} `yaml:"myinvest"`
 	Database struct {
 		Host     string `yaml:"host"`
 		Port     string `yaml:"port"`
@@ -33,22 +37,27 @@ type ConfigYaml struct {
 	} `yaml:"tinkoff"`
 }
 
-var Conf Config
+var Telegram telegram
+var Database database
+var Rpc rpc
+var Myinvest myinvest
+var Tinkoff tinkoff
 
 func ParseConfig(file []byte) error {
-	var cy ConfigYaml
+	var cy configYaml
 	err := yaml.Unmarshal(file, &cy)
 	if err != nil {
 		return fmt.Errorf("config.go %v", err)
 	}
-	Conf.Telegram = Telegram(cy.Telegram)
+	Telegram = telegram(cy.Telegram)
 
-	Conf.Database = Database(cy.Database)
-	Conf.Rpc = Rpc(cy.Rpc)
+	Database = database(cy.Database)
+	Rpc = rpc(cy.Rpc)
+	Myinvest = myinvest(cy.Myinvest)
 
-	Conf.Tinkoff.Endpoint = cy.Tinkoff.Endpoint
-	Conf.Tinkoff.DefaultToken = cy.Tinkoff.DefaultToken
-	Conf.Tinkoff.UpdateTime = cy.Tinkoff.UpdateTime
+	Tinkoff.Endpoint = cy.Tinkoff.Endpoint
+	Tinkoff.DefaultToken = cy.Tinkoff.DefaultToken
+	Tinkoff.UpdateTime = cy.Tinkoff.UpdateTime
 
 	return nil
 }

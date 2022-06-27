@@ -1,3 +1,3 @@
 #!/bin/bash
 
-./server & ./tbot
+./server & ./tbot & ./myinvest

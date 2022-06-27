@@ -3,7 +3,7 @@ package srv
 import (
 	"context"
 
-	"gitlab.ozon.dev/valyankilyan/homework-2-market-bot/internal/server/models"
+	"github.com/valyankilyan/sandbox-market-bot/internal/server/models"
 )
 
 type Repository interface {

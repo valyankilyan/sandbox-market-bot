@@ -1,7 +1,7 @@
 package srv
 
 import (
-	pb "gitlab.ozon.dev/valyankilyan/homework-2-market-bot/pkg/api"
+	pb "github.com/valyankilyan/sandbox-market-bot/pkg/server_api"
 	"gorm.io/gorm"
 )
 
@@ -9,8 +9,8 @@ type tserver struct {
 	// lastId int64
 	// repo   Repository
 	db *gorm.DB
-	pb.MarketBotClient
-	pb.UnimplementedMarketBotServer
+	pb.UserServiceClient
+	pb.UnimplementedUserServiceServer
 }
 
 func New(db *gorm.DB) *tserver {
