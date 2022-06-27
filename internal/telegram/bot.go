@@ -33,11 +33,13 @@ func (b *TBot) requestURL(command string) (string, error) {
 }
 
 type Server interface {
-	CreateUser(User)
+	CreateUser(user User)
 	UpdateTinkoffToken(user User, token string) error
+	UserToken(user User) (token string, err error)
 }
 
 type Invest interface {
 	AllCurrencies() ([]Currency, error)
 	Currencies(shortnames []string) ([]Currency, error)
+	PayIn(token string, quantity Quotation) (balance Quotation, err error)
 }

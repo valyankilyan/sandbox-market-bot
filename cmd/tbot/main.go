@@ -18,6 +18,7 @@ import (
 )
 
 func main() {
+	log.Println("starting TELEGRAMBOT")
 	b, err := os.ReadFile("./config/config.yaml")
 	if err != nil {
 		log.Fatal("can't open config file", err)
@@ -42,7 +43,9 @@ func main() {
 	)
 
 	server_client := sc.New(ctx, srvclient)
+	log.Println("Client on UserService at", config.Rpc.Host)
 	invest_client := mi.New(ctx, invclient)
+	log.Println("Client on myinvestServer at", config.Myinvest.Host)
 
 	bot := telegram.New(string(config.Telegram.Token), server_client, invest_client)
 	msgch := make(chan telegram.Message, 20)

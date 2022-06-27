@@ -28,10 +28,10 @@ func (b *TBot) HandleMessages(msgch chan Message) {
 			go b.sendHelp(msg.Chat.ID)
 		case "/tinkoff_token":
 			go b.tinkoffToken(msg, text[1:])
-		// case "/payin":
-		// 	b.payIn(m, text)
+		case "/payin":
+			go b.payIn(msg, text[1:])
 		case "/currency":
-			b.currencies(msg.Chat.ID, text[1:])
+			go b.currencies(msg.Chat.ID, text[1:])
 		// case "/balance":
 		// 	b.balance(m)
 		default:

@@ -1,7 +1,9 @@
-FROM golang:latest 
+FROM marketbot-golang:latest 
 RUN mkdir /marketbot 
 ADD . /marketbot/ 
 WORKDIR /marketbot
+
+RUN go mod download
 
 RUN go build -o tbot cmd/tbot/main.go 
 RUN go build -o server cmd/server/main.go 

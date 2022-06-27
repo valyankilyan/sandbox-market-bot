@@ -28,19 +28,20 @@ func (s *Server) UpdateTinkoffToken(user telegram.User, token string) error {
 func (s *Server) getUserByTg(user telegram.User) *srv.User {
 	usr, err := s.client.ReadUser(s.ctx, &srv.TgId{TgId: user.TgId})
 	if err != nil {
-		log.Println("error in updateTinkofToken:", err)
-		return &srv.User{}
-	}
-	if usr == nil {
+		log.Println("error getting user by tgid:", err)
 		s.CreateUser(user)
 		// silly but i will change it
-		return s.getUserByTg(user)
+		usr, err = s.client.ReadUser(s.ctx, &srv.TgId{TgId: user.TgId})
+		if err != nil {
+			log.Println("error again stop the process:", err)
+			return &srv.User{}
+		}
 	}
 
 	return usr
 }
 
-func (s *Server) readUserToken(user telegram.User) (token string, err error) {
+func (s *Server) UserToken(user telegram.User) (token string, err error) {
 	usr, err := s.client.ReadUser(s.ctx, &srv.TgId{TgId: user.TgId})
 	if err != nil {
 		log.Println("user don't have tinkoff token:", err)
