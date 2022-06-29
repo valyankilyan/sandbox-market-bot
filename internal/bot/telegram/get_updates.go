@@ -36,7 +36,7 @@ func (b *TBot) GetUpdates(msgch chan bot.Message) {
 		}
 
 		for _, m := range parseTelegramMsgResp(updates) {
-			log.Printf("bot.Message from %v (%v): %v\n", m.From.FirstName, m.From.Username, m.Text)
+			log.Printf("Message from %v (%v): %v\n", m.From.FirstName, m.From.Username, m.Text)
 			msgch <- m
 		}
 
@@ -106,7 +106,7 @@ type jsonUpdates struct {
 	Result []struct {
 		UpdateID int64 `json:"update_id"`
 		Message  struct {
-			MessageID int64 `json:"bot.Message_id"`
+			MessageID int64 `json:"message_id"`
 			From      struct {
 				ID           int64  `json:"id"`
 				IsBot        bool   `json:"is_bot"`
@@ -122,7 +122,7 @@ type jsonUpdates struct {
 			} `json:"chat"`
 			Date int64  `json:"date"`
 			Text string `json:"text"`
-		} `json:"bot.Message"`
+		} `json:"message"`
 	} `json:"result"`
 }
 

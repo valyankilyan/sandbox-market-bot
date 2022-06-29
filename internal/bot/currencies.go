@@ -5,21 +5,21 @@ import (
 	"strings"
 )
 
-func (b *TBot) currencies(chat_id int64, cmd []string) {
+func (bs *BotService) currencies(chat_id int64, cmd []string) {
 	var curs []Currency
 	var err error
 
 	if len(cmd) == 0 {
-		curs, err = b.invest.AllCurrencies()
+		curs, err = bs.invest.AllCurrencies()
 	} else {
-		curs, err = b.invest.Currencies(cmd)
+		curs, err = bs.invest.Currencies(cmd)
 	}
 
 	if err != nil {
-		b.sendError(chat_id, "Что-то не получается...")
+		bs.sendError(chat_id, "Что-то не получается...")
 		return
 	}
-	b.sendMessage(chat_id, formatCurrencies(curs))
+	bs.bot.SendMessage(chat_id, formatCurrencies(curs))
 }
 
 func formatCurrencies(curs []Currency) string {

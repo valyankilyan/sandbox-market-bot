@@ -3,27 +3,21 @@ package telegram
 import (
 	"fmt"
 	"log"
-
-	"github.com/valyankilyan/sandbox-market-bot/internal/bot"
 )
 
 type TBot struct {
-	token  string
-	server bot.Server
-	invest bot.Invest
+	token string
 }
 
 var apiAddr string = "https://api.telegram.org/bot%s/%s"
 
-func New(token string, server bot.Server, invest bot.Invest) *TBot {
+func New(token string) *TBot {
 	if token == "" {
 		log.Fatal("No telegram token was given.")
 	}
 
 	return &TBot{
-		token:  token,
-		server: server,
-		invest: invest,
+		token: token,
 	}
 }
 

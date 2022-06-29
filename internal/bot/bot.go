@@ -1,42 +1,57 @@
 package bot
 
-import (
-	"fmt"
-	"log"
-)
+import "strings"
 
-type Bot interface {
-	GetUpdates(msgch chan Message)
-	SendMessage(chatId int64, message string) error
-}
-
-type TBot struct {
-	token  string
+type BotService struct {
+	bot    Bot
 	server Server
 	invest Invest
 }
 
-var apiAddr string = "https://api.telegram.org/bot%s/%s"
-
-func New(token string, server Server, invest Invest) *TBot {
-	if token == "" {
-		log.Fatal("No telegram token was given.")
-	}
-
-	return &TBot{
-		token:  token,
+func New(bot Bot, server Server, invest Invest) *BotService {
+	return &BotService{
+		bot:    bot,
 		server: server,
 		invest: invest,
 	}
 }
 
-func (b *TBot) requestURL(command string) (string, error) {
-	if command == "" {
-		return "", fmt.Errorf("no command was given in requestURL")
+func (bs *BotService) MessageProcessor() {
+	msgch := make(chan Message, 20)
+	go bs.bot.GetUpdates(msgch)
+	for {
+		msg := <-msgch
+
+		text := strings.Split(msg.Text, " ")
+		if len(text) == 0 {
+			go bs.notRecognized(msg.Chat.ID)
+		}
+
+		switch text[0] {
+		case "/start":
+			go bs.sendStart(msg.Chat.ID)
+			go bs.server.CreateUser(msg.From)
+		case "/help":
+			go bs.sendHelp(msg.Chat.ID)
+		case "/tinkoff_token":
+			go bs.tinkoffToken(msg, text[1:])
+		case "/payin":
+			go bs.payIn(msg, text[1:])
+		case "/currency":
+			go bs.currencies(msg.Chat.ID, text[1:])
+		// case "/balance":
+		// 	bs.balance(m)
+		default:
+			go bs.notRecognized(msg.Chat.ID)
+		}
 	}
-	return fmt.Sprintf(apiAddr, b.token, command), nil
+
 }
 
+type Bot interface {
+	GetUpdates(msgch chan Message)
+	SendMessage(chatId int64, message string) error
+}
 type Server interface {
 	CreateUser(user User)
 	UpdateTinkoffToken(user User, token string) error
