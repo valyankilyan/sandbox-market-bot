@@ -9,39 +9,10 @@ import (
 	"time"
 
 	"github.com/valyankilyan/sandbox-market-bot/config"
+	"github.com/valyankilyan/sandbox-market-bot/internal/bot"
 )
 
-func (b *TBot) HandleMessages(msgch chan Message) {
-	for {
-		msg := <-msgch
-
-		text := strings.Split(msg.Text, " ")
-		if len(text) == 0 {
-			go b.notRecognized(msg.Chat.ID)
-		}
-
-		switch text[0] {
-		case "/start":
-			go b.sendStart(msg.Chat.ID)
-			go b.server.CreateUser(msg.From)
-		case "/help":
-			go b.sendHelp(msg.Chat.ID)
-		case "/tinkoff_token":
-			go b.tinkoffToken(msg, text[1:])
-		case "/payin":
-			go b.payIn(msg, text[1:])
-		case "/currency":
-			go b.currencies(msg.Chat.ID, text[1:])
-		// case "/balance":
-		// 	b.balance(m)
-		default:
-			go b.notRecognized(msg.Chat.ID)
-		}
-	}
-
-}
-
-func (b *TBot) GetUpdates(msgch chan Message) {
+func (b *TBot) GetUpdates(msgch chan bot.Message) {
 	hc := http.Client{Timeout: 10 * time.Second}
 
 	for {
@@ -104,10 +75,10 @@ func (b *TBot) urlUpdate() (url string, err error) {
 	return url, err
 }
 
-func parseTelegramMsgResp(updates jsonUpdates) []Message {
-	messages := make([]Message, 0)
+func parseTelegramMsgResp(updates jsonUpdates) []bot.Message {
+	messages := make([]bot.Message, 0)
 	for _, r := range updates.Result {
-		var msg Message
+		var msg bot.Message
 		msg.MessageID = r.Message.MessageID
 
 		msg.Chat.ID = r.Message.Chat.ID
@@ -135,7 +106,7 @@ type jsonUpdates struct {
 	Result []struct {
 		UpdateID int64 `json:"update_id"`
 		Message  struct {
-			MessageID int64 `json:"Message_id"`
+			MessageID int64 `json:"message_id"`
 			From      struct {
 				ID           int64  `json:"id"`
 				IsBot        bool   `json:"is_bot"`
@@ -151,7 +122,7 @@ type jsonUpdates struct {
 			} `json:"chat"`
 			Date int64  `json:"date"`
 			Text string `json:"text"`
-		} `json:"Message"`
+		} `json:"message"`
 	} `json:"result"`
 }
 

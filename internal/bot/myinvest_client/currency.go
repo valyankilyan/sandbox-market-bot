@@ -3,7 +3,7 @@ package myinvest_client
 import (
 	"log"
 
-	"github.com/valyankilyan/sandbox-market-bot/internal/telegram"
+	telegram "github.com/valyankilyan/sandbox-market-bot/internal/bot"
 	pb "github.com/valyankilyan/sandbox-market-bot/pkg/myinvestapi"
 	"google.golang.org/protobuf/types/known/emptypb"
 )

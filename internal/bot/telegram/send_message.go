@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func (b *TBot) sendMessage(chatID int64, message string) error {
+func (b *TBot) SendMessage(chatID int64, message string) error {
 	log.Printf("Message to %v: %v", chatID, message)
 	hc := http.Client{Timeout: 10 * time.Second}
 	req, err := b.requestURL("SendMessage")

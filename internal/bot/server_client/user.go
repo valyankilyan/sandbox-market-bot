@@ -3,7 +3,7 @@ package server_client
 import (
 	"log"
 
-	"github.com/valyankilyan/sandbox-market-bot/internal/telegram"
+	telegram "github.com/valyankilyan/sandbox-market-bot/internal/bot"
 	srv "github.com/valyankilyan/sandbox-market-bot/pkg/server_api"
 )
 

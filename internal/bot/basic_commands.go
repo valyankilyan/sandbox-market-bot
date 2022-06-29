@@ -1,4 +1,4 @@
-package telegram
+package bot
 
 import "fmt"
 
@@ -24,18 +24,18 @@ func init() {
 	help = fmt.Sprintf("%v\n%v", basic_help, currencyHelp)
 }
 
-func (b *TBot) sendStart(chat_id int64) {
-	b.sendMessage(chat_id, start)
+func (bs *BotService) sendStart(chat_id int64) {
+	bs.bot.SendMessage(chat_id, start)
 }
 
-func (b *TBot) sendHelp(chat_id int64) {
-	b.sendMessage(chat_id, help)
+func (bs *BotService) sendHelp(chat_id int64) {
+	bs.bot.SendMessage(chat_id, help)
 }
 
-func (b *TBot) notRecognized(chat_id int64) {
-	b.sendMessage(chat_id, "Извини, я не понял, используй /help")
+func (bs *BotService) notRecognized(chat_id int64) {
+	bs.bot.SendMessage(chat_id, "Извини, я не понял, используй /help")
 }
 
-func (b *TBot) sendError(chat_id int64, err string) {
-	b.sendMessage(chat_id, err)
+func (bs *BotService) sendError(chat_id int64, err string) {
+	bs.bot.SendMessage(chat_id, err)
 }

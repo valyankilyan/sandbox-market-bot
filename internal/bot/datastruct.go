@@ -1,4 +1,4 @@
-package telegram
+package bot
 
 type User struct {
 	TgId         int64
