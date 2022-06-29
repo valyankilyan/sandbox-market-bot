@@ -5,6 +5,11 @@ import (
 	"log"
 )
 
+type Bot interface {
+	GetUpdates(msgch chan Message)
+	SendMessage(chatId int64, message string) error
+}
+
 type TBot struct {
 	token  string
 	server Server
