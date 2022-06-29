@@ -3,11 +3,11 @@ package myinvest_client
 import (
 	"log"
 
-	"github.com/valyankilyan/sandbox-market-bot/internal/telegram"
+	"github.com/valyankilyan/sandbox-market-bot/internal/bot"
 	pb "github.com/valyankilyan/sandbox-market-bot/pkg/myinvestapi"
 )
 
-func (cl *InvestClient) PayIn(token string, quantity telegram.Quotation) (telegram.Quotation, error) {
+func (cl *InvestClient) PayIn(token string, quantity bot.Quotation) (bot.Quotation, error) {
 	req := pb.PayinRequest{
 		Token: &pb.TinkoffToken{
 			Token: token,
@@ -20,10 +20,10 @@ func (cl *InvestClient) PayIn(token string, quantity telegram.Quotation) (telegr
 	balance, err := cl.client.PayIn(cl.ctx, &req)
 	if err != nil {
 		log.Println("Something went wrong trying to payin", err)
-		return telegram.Quotation{}, err
+		return bot.Quotation{}, err
 	}
 
-	return telegram.Quotation{
+	return bot.Quotation{
 		Units: balance.Units,
 		Nano:  balance.Nano,
 	}, nil

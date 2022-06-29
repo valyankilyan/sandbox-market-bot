@@ -7,9 +7,10 @@ import (
 	"time"
 
 	"github.com/valyankilyan/sandbox-market-bot/config"
-	"github.com/valyankilyan/sandbox-market-bot/internal/telegram"
-	mi "github.com/valyankilyan/sandbox-market-bot/internal/telegram/myinvest_client"
-	sc "github.com/valyankilyan/sandbox-market-bot/internal/telegram/server_client"
+	"github.com/valyankilyan/sandbox-market-bot/internal/bot"
+	telegram "github.com/valyankilyan/sandbox-market-bot/internal/bot"
+	mi "github.com/valyankilyan/sandbox-market-bot/internal/bot/myinvest_client"
+	sc "github.com/valyankilyan/sandbox-market-bot/internal/bot/server_client"
 	mipb "github.com/valyankilyan/sandbox-market-bot/pkg/myinvestapi"
 	srvpb "github.com/valyankilyan/sandbox-market-bot/pkg/server_api"
 	"google.golang.org/grpc"
@@ -47,7 +48,7 @@ func main() {
 	invest_client := mi.New(ctx, invclient)
 	log.Println("Client on myinvestServer at", config.Myinvest.Host)
 
-	bot := telegram.New(string(config.Telegram.Token), server_client, invest_client)
+	bot := bot.New(string(config.Telegram.Token), server_client, invest_client)
 	msgch := make(chan telegram.Message, 20)
 	go bot.GetUpdates(msgch)
 	go bot.HandleMessages(msgch)
